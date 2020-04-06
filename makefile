@@ -4,11 +4,11 @@ CC = gcc
 CFLAGS = -g
 ALL_CFLAGS = -I. -pthread $(CFLAGS)
 MATHFLAG = -lm
-TARGET1 = master
-TARGET2 = bin_adder
-OBJS1 = Main.o 
-OBJS2 = ChildProcess.o
-LOGFILE = adder_log 
+TARGET1 = oss
+TARGET2 = user
+OBJS1 = oss.o 
+OBJS2 = user.o
+ 
 
 all: $(TARGET1) $(TARGET2)
 
@@ -22,5 +22,5 @@ $(TARGET2): $(OBJS2)
 	$(CC) $(ALL_CFLAGS) -c $<
 
 clean:
-	rm -f *.o *.dat $(TARGET1) $(TARGET2) $(LOGFILE)
+	rm -f *.o *.dat $(TARGET1) $(TARGET2)
 	find . -maxdepth 1 -type f -executable -exec rm {} +
