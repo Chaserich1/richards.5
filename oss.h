@@ -27,16 +27,18 @@ FILE* filePtr;
 void manager(int);
 
 //Shared memory keys and shared memory segment ids
-const key_t pcbtKey = 122032;
+const key_t resDescKey = 122032;
 const key_t clockKey = 202123;
 const key_t messageKey = 493343;
-int pcbtSegment, clockSegment, msgqSegment;
+int resDescSegment, clockSegment, msgqSegment;
 
 typedef struct
 {
     long typeofMsg;
     int valueofMsg;
 } msg;
+
+/* ------------------------------Simulated Clock Setup----------------------------------- */
 
 //Shared memory clock
 typedef struct
@@ -80,5 +82,60 @@ clksim subTime(clksim a, clksim b)
     return sub;
 }
 
+/* ------------------------------Resource Descriptor Setup----------------------------------- */
+
+/* Resource Decriptor is a fixed size struct containing info on managing the resources in oss */
+typedef struct
+{
+    //Resources Vector
+    int totalResourcesVector[20];
+    //Allocation vector
+    int allocatedVector[20];
+    //Shared or not vector
+    int resSharedVector[20];
+    //Request matrix of resources and the processes doing the requesting
+    int requestingMatrix[18][20];
+    //Allocation matrix of resources and the processes who have the resources allocated to them
+    int allocationMatrix[18][20];
+} resDesc;
+
+/* Constructor for the resource descriptor: initial instances of each resource class are a random num
+   between 1 and 10 (inclusively). Create 20 resource descriptors out of which 20 +- 5% are shared */
+void resDescConstruct(resDesc *descPtr)
+{
+    int i, j; //loops
+    srand(time(NULL));
+    int randNum = rand() % ((25 + 1) - 15) + 15;
+    //Initialize the matrixes to all zeros
+    for(i = 0; i < 18; i++)
+    {
+        for(j = 0; j < 20; j++)
+        {
+            descPtr-> requestingMatrix[i][j] = 0;
+            descPtr-> allocationMatrix[i][j] = 0;
+        }
+    }
+    for(i = 0; i < 20; i++)
+    {
+        //20 +- 5% chance of it being a shared resource
+        int randNum = rand() % ((6 + 1) - 4) + 4;
+        int randNum1 = rand() % (randNum) + 1;
+        if(randNum1 != 1)
+        {
+            //Random Number between 1-10 inclusive
+            int randNum2 = rand() % 10 + 1;
+            descPtr-> totalResourcesVector[i] = randNum2;
+            descPtr-> allocatedVector[i] = descPtr-> totalResourcesVector[i];
+            descPtr-> resSharedVector[i] = 0;
+        }
+        else
+        {
+            descPtr-> totalResourcesVector[i] = randNum;
+            descPtr-> allocatedVector[i] = descPtr-> totalResourcesVector[i];
+            descPtr-> resSharedVector[i] = 1;
+        }       
+    }
+    return;
+}
 
 #endif

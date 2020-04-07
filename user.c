@@ -10,20 +10,20 @@ int main(int argc, char *argv[])
     msg message;
     int receiveMessage, sendMessage;
    
-    int *pcbtPtr;
+    int *resDescPtr;
     clksim *clockPtr;
         
     /* Get and attach to the process control block table shared memory */
-    pcbtSegment = shmget(pcbtKey, sizeof(int), IPC_CREAT | 0666);
-    if(pcbtSegment < 0)
+    resDescSegment = shmget(resDescKey, sizeof(int), IPC_CREAT | 0666);
+    if(resDescSegment < 0)
     {
-        perror("user: Error: Failed to get pcb table segment (shmget)");
+        perror("user: Error: Failed to get resource descriptor segment (shmget)");
         exit(EXIT_FAILURE);
     }
-    pcbtPtr = shmat(pcbtSegment, NULL, 0);
-    if(pcbtPtr < 0)
+    resDescPtr = shmat(resDescSegment, NULL, 0);
+    if(resDescPtr < 0)
     {
-        perror("user: Error: Failed to attach pcb table (shmat)");
+        perror("user: Error: Failed to attach resource descriptor (shmat)");
         exit(EXIT_FAILURE);
     }
     

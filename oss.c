@@ -57,18 +57,18 @@ void manager(int maxProcsInSys)
 
     int receivedMsg; //Recieved from child telling scheduler what to do
     
-    /* Create process control block shared memory */ 
-    int *pcbtPtr;
-    pcbtSegment = shmget(pcbtKey, sizeof(int) * maxProcsInSys, IPC_CREAT | 0666);
-    if(pcbtSegment < 0)
+    /* Create resource descriptor shared memory */ 
+    int *resDescPtr;
+    resDescSegment = shmget(resDescKey, sizeof(int) * maxProcsInSys, IPC_CREAT | 0666);
+    if(resDescSegment < 0)
     {
-        perror("oss: Error: Failed to get process control table segment (shmget)");
+        perror("oss: Error: Failed to get resource desriptor segment (shmget)");
         removeAllMem();
     }
-    pcbtPtr = shmat(pcbtSegment, NULL, 0);
-    if(pcbtPtr < 0)
+    resDescPtr = shmat(resDescSegment, NULL, 0);
+    if(resDescPtr < 0)
     {
-        perror("oss: Error: Failed to attach to control table segment (shmat)");
+        perror("oss: Error: Failed to attach to resource descriptor segment (shmat)");
         removeAllMem();
     }
  
@@ -116,7 +116,7 @@ FILE *openLogFile(char *file)
 /* When there is a failure, call this to make sure all memory is removed */
 void removeAllMem()
 {
-    shmctl(pcbtSegment, IPC_RMID, NULL);   
+    shmctl(resDescSegment, IPC_RMID, NULL);   
     shmctl(clockSegment, IPC_RMID, NULL);
     msgctl(msgqSegment, IPC_RMID, NULL);
     fclose(filePtr);
