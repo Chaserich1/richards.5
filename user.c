@@ -56,3 +56,27 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+/* Message being sent to oss requesting resources */
+int requestToOss(int process, int procPid, int resource)
+{
+    int sendmessage, receivemessage;
+    /* Send the message to oss with type 1 and it's a request */
+    msg message = {.typeofMsg = 1, .msgDetails = requestResource, .resource = resource, .process = process, .sendingProcess = procPid};
+    
+    /* Send the message and check for failure */
+    sendmessage = msgsnd(msgqSegment, &message, sizeof(msg), 0);
+    if(sendmessage == -1)
+    {
+        perror("user: Error: Failed to send message (msgsnd)\n");
+        exit(EXIT_FAILURE);
+    }
+    /* Receive the message from oss */
+    receivemessage = msgrcv(msgqSegment, &message, sizeof(msg), process, 0);
+    if(receivemessage == -1)
+    {
+        perror("user: Error: Failed to receive message (msgrcv)\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    return message.msgDetails;
+}

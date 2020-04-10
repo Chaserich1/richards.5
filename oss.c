@@ -114,8 +114,8 @@ void manager(int maxProcsInSys)
     //Loop runs constantly until it has to terminate
     while(1)
     {
-        //Only 18 processes in the system at once
-        if(procCounter < maxProcsInSys && shouldSpawn(spawnNextProc, (*clockPtr)) == 1)
+        //Only 18 processes in the system at once and spawn random between 0 and 5000000000
+        if((procCounter < maxProcsInSys) && ((clockPtr-> sec > spawnNextProc.sec) || (clockPtr-> sec == spawnNextProc.sec && clockPtr-> nanosec >= spawnNextProc.nanosec)))
         {
             procPid = generateProcPid(pidArr, maxProcsInSys);
             if(procPid < 0)
@@ -183,6 +183,76 @@ clksim nextProcessStartTime(clksim maxTimeBetweenProcs, clksim curTime)
         nextProcTime.nanosec -= 1000000000;
     }
     return nextProcTime;
+}
+
+/* For sending the message to the process */
+void messageToProcess(int receiver, int response)
+{
+    int sendmessage;
+    //Process is -1 because we didn't generate one, no resource, oss is sending process of 1
+    msg message = {.typeofMsg = receiver, .msgDetails = response, .process = -1, .resource = -1, .sendingProcess = 1};
+    
+    //Send the message and check for failure
+    sendmessage = msgsnd(msgqSegment, &message, sizeof(msg), 0);
+    if(sendmessage == -1)
+    {
+        perror("oss: Error: Failed to send message (msgsnd)\n");
+        removeAllMem();
+    }
+    return;
+}
+
+/* req_lt_avail from notes */
+int req_lt_avail(int req[], int avail[], int shared[], int held[])
+{
+    int i;
+    for(i = 0; i < 20; i++)
+    {
+        if(shared[i] == 1 && req[i] > 0 && held[i] == 5)
+            break;
+        else if(req[i] > avail[i])
+            break;
+    }
+
+    if(i == 20)
+        return 1;
+    else
+        return 0;
+}
+
+/* Deadlock algorithm from notes */
+int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int *procCounter, int *outputLines)
+{
+    int i, p;
+    int work[20];
+    int finish[nProcs];
+    int deadlockedProcs[nProcs];
+    int counter = 0;
+
+    for(i = 0; i < 20; i++)
+        work[i] = resDescPtr-> allocatedVector[i];
+    for(i = 0; i < nProcs; i++)
+        finish[i] = 0;
+
+    for(p = 0; p < nProcs; p++)
+    {
+        if(finish[p])
+            continue;
+        if((req_lt_avail(resDescPtr-> requestingMatrix[p], resDescPtr-> allocatedVector, resDescPtr-> resSharedVector, resDescPtr-> allocatedMatrix[p])))
+        {
+            finish[p] = 1;
+            for(i = 0; i < 20; i++)
+                work[i] += resDescPtr-> allocatedMatrix[p][i];
+            p = -1;
+        }
+    }
+
+    for(p = 0; p < nProcs; p++)
+    {
+        if(!finish[p])
+            deadlockedProcs[counter++] = p;
+    }
+    
 }
 
 /* Open the log file that contains the output and check for failure */

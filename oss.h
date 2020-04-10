@@ -28,17 +28,34 @@ void manager(int);
 
 int genProcPid(int *pidArr, int totalPids); //Generates the pid (0,1,2,3,4,..17) 
 
+
 //Shared memory keys and shared memory segment ids
 const key_t resDescKey = 122032;
 const key_t clockKey = 202123;
 const key_t messageKey = 493343;
 int resDescSegment, clockSegment, msgqSegment;
 
+/* ---------------------------------Messaging Setup-------------------------------------- */
+
+//Child send to oss
+const int requestResource = 0;
+const int releaseResource = 1;
+const int terminateProcess = 2;
+//Oss sends to child
+const int grantedRequest = 3;
+const int denyRequest = 4;
+
 typedef struct
 {
     long typeofMsg;
-    int valueofMsg;
+    int process;
+    int resource;
+    int sendingProcess;
+    int msgDetails;
 } msg;
+
+void messageToProcess(int receiver, int response);
+int requestToOss(int process, int procPid, int resource);
 
 /* ------------------------------Simulated Clock Setup----------------------------------- */
 
@@ -62,9 +79,9 @@ void clockIncrementor(clksim *simTime, int incrementor)
 }
 
 //For adding and subtracting the virtual clock times
-clksim addTime(clksim a, clksim b)
+clksim addTime(clksim time1, clksim time2)
 {
-    clksim sum = {.sec = a.sec + b.sec, .nanosec = a.nanosec + b.nanosec};
+    clksim sum = {.sec = time1.sec + time2.sec, .nanosec = time1.nanosec + time2.nanosec};
     if(sum.nanosec >= 1000000000)
     {
         sum.nanosec -= 1000000000;
@@ -73,24 +90,15 @@ clksim addTime(clksim a, clksim b)
     return sum;
 }
 
-clksim subTime(clksim a, clksim b)
+clksim subTime(clksim time1, clksim time2)
 {
-    clksim sub = {.sec = a.sec - b.sec, .nanosec = a.nanosec - b.nanosec};
+    clksim sub = {.sec = time1.sec - time2.sec, .nanosec = time1.nanosec - time2.nanosec};
     if(sub.nanosec < 0)
     {
         sub.nanosec += 1000000000;
         sub.sec -= 1;
     }
     return sub;
-}
-
-int shouldSpawn(clksim a, clksim b)
-{
-    if(a.sec > b.sec)
-        return 0;
-    else if(a.sec == b.sec && a.nanosec > b.nanosec)
-        return 0;
-    return 1;
 }
 
 clksim nextProcessStartTime(clksim maxTime, clksim curTime);
@@ -108,8 +116,8 @@ typedef struct
     int resSharedVector[20];
     //Request matrix of resources and the processes doing the requesting
     int requestingMatrix[18][20];
-    //Allocation matrix of resources and the processes who have the resources allocated to them
-    int allocationMatrix[18][20];
+    //Allocated matrix of resources and the processes who have the resources allocated to them
+    int allocatedMatrix[18][20];
 } resDesc;
 
 /* Constructor for the resource descriptor: initial instances of each resource class are a random num
@@ -125,7 +133,7 @@ void resDescConstruct(resDesc *descPtr)
         for(j = 0; j < 20; j++)
         {
             descPtr-> requestingMatrix[i][j] = 0;
-            descPtr-> allocationMatrix[i][j] = 0;
+            descPtr-> allocatedMatrix[i][j] = 0;
         }
     }
     for(i = 0; i < 20; i++)
@@ -150,5 +158,8 @@ void resDescConstruct(resDesc *descPtr)
     }
     return;
 }
+
+int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int *procCounter, int *outputLines);
+int req_lt_avail(int req[], int avail[], int shared[], int held[]);
 
 #endif
