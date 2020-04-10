@@ -47,14 +47,6 @@ void manager(int maxProcsInSys)
 {
     filePtr = openLogFile(outputLog); //open the output file
     
-    int maxProcs = 100; //Only 100 processes should be created
-    int outputLines = 0; //Counts the lines written to file to make sure we don't have an infinite loop
-    int completedProcs = 0; //Processes that have finished
-    int procCounter = 0; //Counts the processes
-
-    int i = 0; //For loops 
-    int processExec; //exec and check for failure
-
     int receivedMsg; //Recieved from child telling scheduler what to do
     
     /* Create resource descriptor shared memory */ 
@@ -88,6 +80,11 @@ void manager(int maxProcsInSys)
     }
     clockPtr-> sec = 0;
     clockPtr-> nanosec = 0;   
+ 
+    /* Constant for the time between each new process and the time for
+       spawning the next process, initially spawning one process */   
+    clksim maxTimeBetweenNewProcesses = {.sec = 0, .nanosec = 500000000};
+    clksim spawnNextProc = {.sec = 0, .nanosec = 0};
 
     /* Create the message queue */
     msgqSegment = msgget(messageKey, IPC_CREAT | 0777);
@@ -97,8 +94,95 @@ void manager(int maxProcsInSys)
         removeAllMem();
     }
 
-    
+    int outputLines = 0; //Counts the lines written to file to make sure we don't have an infinite loop
+    int completedProcs = 0; //Processes that have finished
+    int procCounter = 0; //Counts the processes
+    int i = 0; //For loops
+    int processExec; //exec  nd check for failure
+    int procPid;
+    int pid;    
+    char msgqSegmentStr[10];
+    char procPidStr[3];
+    sprintf(msgqSegmentStr, "%d", msgqSegment);    
+
+    int *pidArr;
+    pidArr = (int *)malloc(sizeof(int) * maxProcsInSys);
+    for(i = 0; i < maxProcsInSys; i++)
+        pidArr[i] = -1;
+
+
+    //Loop runs constantly until it has to terminate
+    while(1)
+    {
+        //Only 18 processes in the system at once
+        if(procCounter < maxProcsInSys && shouldSpawn(spawnNextProc, (*clockPtr)) == 1)
+        {
+            procPid = generateProcPid(pidArr, maxProcsInSys);
+            if(procPid < 0)
+            {
+                perror("oss: Error: Max number of pids in the system\n");
+                removeAllMem();               
+            }     
+            /* Copy the generated pid into a string for exec, fork, check
+               for failure, execl and check for failure */      
+            sprintf(procPidStr, "%d", procPid);
+            pid = fork();
+            if(fork < 0)
+            {
+                perror("oss: Error: Failed to fork process\n");
+                removeAllMem();
+            }
+            else if(pid == 0)
+            {
+                processExec = execl("./user", "user", msgqSegmentStr, procPidStr, (char *)NULL);
+                if(processExec < 0)
+                {
+                    perror("oss: Error: Failed to execl\n");
+                    removeAllMem();
+                }
+            }
+            procCounter++;
+            //Put the pid in the pid array in the spot based on the generated pid
+            pidArr[procPid] = pid;
+     
+            //Get the time for the next process to run
+            spawnNextProc = nextProcessStartTime(maxTimeBetweenNewProcesses, (*clockPtr));
    
+            if(outputLines < 100000)
+            {
+                fprintf(filePtr, "OSS has spawned process P%d at time %d:%09d\n", procPid, clockPtr-> sec, clockPtr-> nanosec);
+                outputLines += 2;
+            }
+        }
+        
+        clockIncrementor(clockPtr, 1000000);
+    }    
+   
+}
+
+//Generate a simulated process pid between 0-18
+int generateProcPid(int *pidArr, int totalPids)
+{
+    int i;
+    for(i = 0; i < totalPids; i++)
+    {
+        if(pidArr[i] == -1)
+            return i;
+    }
+    return -1;
+}
+
+/* Determines when to launch the next process based on a random value
+ *    between 0 and maxTimeBetweenNewProcs and returns the time that it should launch */
+clksim nextProcessStartTime(clksim maxTimeBetweenProcs, clksim curTime)
+{
+    clksim nextProcTime = {.sec = (rand() % (maxTimeBetweenProcs.sec + 1)) + curTime.sec, .nanosec = (rand() % (maxTimeBetweenProcs.nanosec + 1)) + curTime.nanosec};
+    if(nextProcTime.nanosec >= 1000000000)
+    {
+        nextProcTime.sec += 1;
+        nextProcTime.nanosec -= 1000000000;
+    }
+    return nextProcTime;
 }
 
 /* Open the log file that contains the output and check for failure */

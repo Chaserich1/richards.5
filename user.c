@@ -43,13 +43,15 @@ int main(int argc, char *argv[])
 
    
         
-    /* Send the message back and check for failure */
+    /* Send the message back and check for failure/
     sendMessage = msgsnd(msgqSegment, &message, sizeof(message.valueofMsg), 0);
     if(sendMessage == -1)
     {
         perror("user: Error: Failed to send message (msgsnd)");
         exit(EXIT_FAILURE);
-    }
+    } */
+
+    printf("A process\n");
 
     return 0;
 }

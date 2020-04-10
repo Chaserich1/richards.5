@@ -26,6 +26,8 @@ FILE* openLogFile(char *file); //Opens the output log file
 FILE* filePtr;
 void manager(int);
 
+int genProcPid(int *pidArr, int totalPids); //Generates the pid (0,1,2,3,4,..17) 
+
 //Shared memory keys and shared memory segment ids
 const key_t resDescKey = 122032;
 const key_t clockKey = 202123;
@@ -81,6 +83,17 @@ clksim subTime(clksim a, clksim b)
     }
     return sub;
 }
+
+int shouldSpawn(clksim a, clksim b)
+{
+    if(a.sec > b.sec)
+        return 0;
+    else if(a.sec == b.sec && a.nanosec > b.nanosec)
+        return 0;
+    return 1;
+}
+
+clksim nextProcessStartTime(clksim maxTime, clksim curTime);
 
 /* ------------------------------Resource Descriptor Setup----------------------------------- */
 
