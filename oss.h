@@ -56,6 +56,9 @@ typedef struct
 
 void messageToProcess(int receiver, int response);
 int requestToOss(int process, int procPid, int resource);
+int releaseToOss(int process, int procPid, int resource);
+void terminateToOss(int process, int procPid);
+void waiting(int process);
 
 /* ------------------------------Simulated Clock Setup----------------------------------- */
 
