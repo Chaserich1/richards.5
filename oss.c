@@ -50,7 +50,7 @@ void manager(int maxProcsInSys)
     int receivedMsg; //Recieved from child telling scheduler what to do
     
     /* Create resource descriptor shared memory */ 
-    int *resDescPtr;
+    resDesc *resDescPtr;
     resDescSegment = shmget(resDescKey, sizeof(int) * maxProcsInSys, IPC_CREAT | 0666);
     if(resDescSegment < 0)
     {
@@ -93,12 +93,14 @@ void manager(int maxProcsInSys)
         perror("oss: Error: Failed to get message segment (msgget)");
         removeAllMem();
     }
+    msg message;
 
     int outputLines = 0; //Counts the lines written to file to make sure we don't have an infinite loop
     int completedProcs = 0; //Processes that have finished
     int procCounter = 0; //Counts the processes
     int i = 0; //For loops
-    int processExec; //exec  nd check for failure
+    int processExec; //exec  nd check for failurei
+    int deadlockDetector = 0;
     int procPid;
     int pid;    
     char msgqSegmentStr[10];
@@ -154,9 +156,125 @@ void manager(int maxProcsInSys)
                 outputLines += 2;
             }
         }
+        else if((msgrcv(msgqSegment, &message, sizeof(msg), 1, IPC_NOWAIT)) > 0) 
+        {
+            //printf("Message Handling");
+            if(message.msgDetails == requestResource)
+            {
+                //Write the request to the log file for verbose
+                if(outputLines < 100000)
+                {
+                    fprintf(filePtr, "Oss has detected P%d requesting R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                    outputLines++;
+                }
+                //Requesting the shared resource
+                if(resDescPtr-> resSharedVector[message.resource] == 1)
+                {
+                    //Make sure it doesn't have more than it should
+                    if(resDescPtr-> allocatedMatrix[message.process][message.resource] < 5)
+                    {
+                        //Grant the request for resource
+                        messageToProcess(message.sendingProcess, grantedRequest);
+                        if(outputLines < 100000)
+                        {
+                            fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                            outputLines++;
+                        }                
+                    }
+                    //Otherwise deny the request and 
+                    else
+                    {
+                        resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
+                        messageToProcess(message.sendingProcess, denyRequest);
+                        if(outputLines < 100000)
+                        {
+                            fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                            outputLines++;
+                        }   
+                    }
+                }
+                /* Requesting a nonshareable resource */
+                else if(resDescPtr-> allocatedVector[message.resource] > 0)
+                {
+                    resDescPtr-> allocatedVector[message.resource] -= 1;
+                    resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
+                    messageToProcess(message.sendingProcess, grantedRequest);
+                    if(outputLines < 100000)
+                    {
+                        fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                        outputLines++;
+                    }
+                }
+                /* Otherwise there are not enough of the nonshareable resource available */
+                else
+                {
+                    resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
+                    messageToProcess(message.sendingProcess, denyRequest);
+                    if(outputLines < 100000)
+                    {
+                        fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                        outputLines++;
+                    }
+                }     
+   
+            }
+            /* If the message is for releasing resources */
+            else if(message.msgDetails == releaseResource)
+            {
+                //If there is resources allocated
+                if(resDescPtr-> allocatedMatrix[message.process][message.resource] > 0)
+                {
+                    //If it's not shared, release, and let the process know
+                    if(resDescPtr-> resSharedVector[message.resource] == 0)
+                        resDescPtr-> allocatedVector[message.resource] += 1;
+                    resDescPtr-> allocatedMatrix[message.process][message.resource] -= 1;
+                    messageToProcess(message.sendingProcess, grantedRequest);
+                    if(outputLines < 100000)
+                    {
+                        fprintf(filePtr, "Oss has acknowledged P%d releasing R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                        outputLines++;
+                    }
+                }
+            }
+            /* If it is time to terminate the process */
+            else if(message.msgDetails == terminateProcess)
+            {
+                int process;
+                //Resources are available once again
+                for(i = 0; i < 20; i++)
+                {
+                    if(resDescPtr-> resSharedVector[i] == 0)
+                        resDescPtr-> allocatedVector[i] += resDescPtr-> allocatedMatrix[message.process][i];
+                    resDescPtr-> allocatedMatrix[message.process][i] = 0;
+                }
+                //The simulated pid is available now
+                pidArr[message.process] = -1;
+                procCounter -= 1;
+                process = waitpid(message.sendingProcess, NULL, 0);
+                if(outputLines < 100000)
+                {
+                    fprintf(filePtr, "Oss has acknowledged P%d terminating at time %d:%d\n", message.process, clockPtr-> sec, clockPtr-> nanosec);
+                    outputLines++;
+                }
+            }
+        }
         
+
+        //Check for a deadlock every second
+        if(clockPtr-> nanosec == 0)
+        {
+            //printf("Check for deadlock");
+            deadlockDetector = deadlock(resDescPtr, maxProcsInSys, clockPtr, pidArr, &procCounter, &outputLines);
+            if(deadlockDetector == 1 && outputLines < 100000)
+            {
+                printf("Not sure yet\n");
+            }
+        }        
+
         clockIncrementor(clockPtr, 1000000);
     }    
+    
+    return;
    
 }
 
