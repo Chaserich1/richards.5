@@ -164,5 +164,6 @@ void resDescConstruct(resDesc *descPtr)
 
 int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int *procCounter, int *outputLines);
 int req_lt_avail(int req[], int avail[], int shared[], int held[]);
+void release(resDesc *resDescPtr, int procPid, int *pidArr, int *procCounter);
 
 #endif

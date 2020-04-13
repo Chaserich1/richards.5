@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     /* Signal for terminating, freeing up shared mem, killing all children 
        if the program goes for more than two seconds of real clock */
     signal(SIGALRM, sigHandler);
-    alarm(2);
+    alarm(10);
 
     /* Signal for terminating, freeing up shared mem, killing all 
        children if the user enters ctrl-c */
@@ -63,6 +63,7 @@ void manager(int maxProcsInSys)
         perror("oss: Error: Failed to attach to resource descriptor segment (shmat)");
         removeAllMem();
     }
+    resDescConstruct(resDescPtr);
  
     /* Create the simulated clock in shared memory */
     clksim *clockPtr;
@@ -96,7 +97,6 @@ void manager(int maxProcsInSys)
     msg message;
 
     int outputLines = 0; //Counts the lines written to file to make sure we don't have an infinite loop
-    int completedProcs = 0; //Processes that have finished
     int procCounter = 0; //Counts the processes
     int i = 0; //For loops
     int processExec; //exec  nd check for failurei
@@ -152,8 +152,8 @@ void manager(int maxProcsInSys)
    
             if(outputLines < 100000)
             {
-                fprintf(filePtr, "OSS has spawned process P%d at time %d:%09d\n", procPid, clockPtr-> sec, clockPtr-> nanosec);
-                outputLines += 2;
+                fprintf(filePtr, "OSS has spawned process P%d at time %d:%d\n", procPid, clockPtr-> sec, clockPtr-> nanosec);
+                outputLines++;
             }
         }
         else if((msgrcv(msgqSegment, &message, sizeof(msg), 1, IPC_NOWAIT)) > 0) 
@@ -174,6 +174,7 @@ void manager(int maxProcsInSys)
                     if(resDescPtr-> allocatedMatrix[message.process][message.resource] < 5)
                     {
                         //Grant the request for resource
+                        resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
                         messageToProcess(message.sendingProcess, grantedRequest);
                         if(outputLines < 100000)
                         {
@@ -239,18 +240,19 @@ void manager(int maxProcsInSys)
             /* If it is time to terminate the process */
             else if(message.msgDetails == terminateProcess)
             {
-                int process;
+                int pid;
                 //Resources are available once again
                 for(i = 0; i < 20; i++)
                 {
                     if(resDescPtr-> resSharedVector[i] == 0)
                         resDescPtr-> allocatedVector[i] += resDescPtr-> allocatedMatrix[message.process][i];
                     resDescPtr-> allocatedMatrix[message.process][i] = 0;
+                    resDescPtr-> requestingMatrix[message.process][i] = 0;
                 }
                 //The simulated pid is available now
                 pidArr[message.process] = -1;
                 procCounter -= 1;
-                process = waitpid(message.sendingProcess, NULL, 0);
+                pid = waitpid(message.sendingProcess, NULL, 0);
                 if(outputLines < 100000)
                 {
                     fprintf(filePtr, "Oss has acknowledged P%d terminating at time %d:%d\n", message.process, clockPtr-> sec, clockPtr-> nanosec);
@@ -370,8 +372,58 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
         if(!finish[p])
             deadlockedProcs[counter++] = p;
     }
-    
+
+    /* Deadlock resolution: Kill all deadlocked processes */
+    if(counter > 0)
+    {
+        for(i = 0; i < counter; i++)
+        {
+            if((*outputLines) < 100000)
+            {
+                fprintf(filePtr, "Oss detected that P%d is deadlocked\n", deadlockedProcs[i]);
+                (*outputLines)++;
+            }
+            
+            //release(resDescPtr, deadlockedProcs[i], pidArr, procCounter);
+            int j; 
+            //Terminate by killing the process
+            kill(pidArr[deadlockedProcs[i]], SIGKILL);
+            waitpid(pidArr[deadlockedProcs[i]], NULL, 0);
+            //Release the resources
+            for(j = 0; j < 20; j++)
+            {
+                if(resDescPtr-> resSharedVector[j] == 0)
+                    resDescPtr-> allocatedVector[j] += resDescPtr-> allocatedMatrix[deadlockedProcs[i]][j];
+                resDescPtr-> allocatedMatrix[deadlockedProcs[i]][j] = 0;
+                resDescPtr-> requestingMatrix[deadlockedProcs[i]][j] = 0;
+            }
+
+            //Add the pid back to the available pids
+            pidArr[deadlockedProcs[i]] = -1;
+            (*procCounter)--;
+            
+            if((*outputLines) < 100000)
+            {
+                fprintf(filePtr, "Oss killing process P%d\n", deadlockedProcs[i]);
+                (*outputLines)++;
+            }
+        }
+        return 1;
+    }
+    return 0;   
 }
+
+/*void release(resDesc *resDescPtr, int procPid, int *pidArr, int *procCounter)
+{
+    int i;
+    kill(pidArr[procPid], SIGKILL);
+    waitpid(pidArr[procPid], NULL, 0);
+
+    for(i = 0; i < 20; i++)
+    {
+        if(resDescPtr-> resSharedVector[i]
+    }
+}*/
 
 /* Open the log file that contains the output and check for failure */
 FILE *openLogFile(char *file)
