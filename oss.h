@@ -25,9 +25,7 @@ void removeAllMem(); //Removes all sharedmemory
 FILE* openLogFile(char *file); //Opens the output log file
 FILE* filePtr;
 void manager(int);
-
 int genProcPid(int *pidArr, int totalPids); //Generates the pid (0,1,2,3,4,..17) 
-
 
 //Shared memory keys and shared memory segment ids
 const key_t resDescKey = 122032;
@@ -44,7 +42,7 @@ const int terminateProcess = 2;
 //Oss sends to child
 const int grantedRequest = 3;
 const int denyRequest = 4;
-
+//Message structure
 typedef struct
 {
     long typeofMsg;
@@ -53,7 +51,7 @@ typedef struct
     int sendingProcess;
     int msgDetails;
 } msg;
-
+//Prototypes for different messages to and from oss and user
 void messageToProcess(int receiver, int response);
 int requestToOss(int process, int procPid, int resource);
 int releaseToOss(int process, int procPid, int resource);
@@ -69,8 +67,7 @@ typedef struct
     unsigned int nanosec;
 } clksim;
 
-
-//Increment the clock so if it reaches a second in nanoseconds it changes accordingly
+//Increment the clock so if it reaches a second in nanoseconds it changes accordingly and increment time
 void clockIncrementor(clksim *simTime, int incrementor)
 {
     simTime-> nanosec += incrementor;
@@ -103,7 +100,7 @@ clksim subTime(clksim time1, clksim time2)
     }
     return sub;
 }
-
+//Start time for the next process (between 1 and 500 milliseconds)
 clksim nextProcessStartTime(clksim maxTime, clksim curTime);
 
 /* ------------------------------Resource Descriptor Setup----------------------------------- */
@@ -161,9 +158,8 @@ void resDescConstruct(resDesc *descPtr)
     }
     return;
 }
-
+//Prototypes for deadlock checking from notes and deadlock resolution
 int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int *procCounter, int *outputLines);
 int req_lt_avail(int req[], int avail[], int shared[], int held[]);
-void release(resDesc *resDescPtr, int procPid, int *pidArr, int *procCounter);
 
 #endif

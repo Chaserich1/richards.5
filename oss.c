@@ -384,7 +384,6 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
                 (*outputLines)++;
             }
             
-            //release(resDescPtr, deadlockedProcs[i], pidArr, procCounter);
             int j; 
             //Terminate by killing the process
             kill(pidArr[deadlockedProcs[i]], SIGKILL);
@@ -413,18 +412,6 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
     return 0;   
 }
 
-/*void release(resDesc *resDescPtr, int procPid, int *pidArr, int *procCounter)
-{
-    int i;
-    kill(pidArr[procPid], SIGKILL);
-    waitpid(pidArr[procPid], NULL, 0);
-
-    for(i = 0; i < 20; i++)
-    {
-        if(resDescPtr-> resSharedVector[i]
-    }
-}*/
-
 /* Open the log file that contains the output and check for failure */
 FILE *openLogFile(char *file)
 {
@@ -443,7 +430,9 @@ void removeAllMem()
     shmctl(resDescSegment, IPC_RMID, NULL);   
     shmctl(clockSegment, IPC_RMID, NULL);
     msgctl(msgqSegment, IPC_RMID, NULL);
+    kill(0, SIGTERM);
     fclose(filePtr);
+    exit(EXIT_SUCCESS);
 } 
 
 /* Signal handler, that looks to see if the signal is for 2 seconds being up or ctrl-c being entered.
