@@ -26,7 +26,7 @@ void sigHandler(int sig); //Signal Handle(ctrl c and timeout)
 void removeAllMem(); //Removes all sharedmemory
 FILE* openLogFile(char *file); //Opens the output log file
 FILE* filePtr;
-void manager(int);
+void manager(int, int);
 int genProcPid(int *pidArr, int totalPids); //Generates the pid (0,1,2,3,4,..17) 
 
 //Shared memory keys and shared memory segment ids

@@ -11,9 +11,9 @@ int main(int argc, char* argv[])
 {
     int c;
     int n = 18; //Max Children in system at once
-    //char *outputLog = "logOutput.dat";
+    int verbose = 0;
     srand(time(0));
-    while((c = getopt(argc, argv, "hn:")) != -1)
+    while((c = getopt(argc, argv, "hn:v")) != -1)
     {
         switch(c)
         {
@@ -22,6 +22,9 @@ int main(int argc, char* argv[])
                 return (EXIT_SUCCESS);
             case 'n':
                 n = atoi(optarg);
+                break;
+            case 'v':
+                verbose = 1;
                 break;
             default:
                 printf("Using default values");
@@ -38,13 +41,13 @@ int main(int argc, char* argv[])
        children if the user enters ctrl-c */
     signal(SIGINT, sigHandler);  
 
-    manager(n); //Call scheduler function
+    manager(n, verbose); //Call scheduler function
     removeAllMem(); //Remove all shared memory, message queue, kill children, close file
     return 0;
 }
 
 /* Does the fork, exec and handles the messaging to and from user */
-void manager(int maxProcsInSys)
+void manager(int maxProcsInSys, int verbose)
 {
     filePtr = openLogFile(outputLog); //open the output file
     
@@ -154,7 +157,7 @@ void manager(int maxProcsInSys)
             //Get the time for the next process to run
             spawnNextProc = nextProcessStartTime(maxTimeBetweenNewProcesses, (*clockPtr));
    
-            if(outputLines < 100000)
+            if(outputLines < 100000 && verbose == 1)
             {
                 fprintf(filePtr, "OSS has spawned process P%d at time %d:%d\n", procPid, clockPtr-> sec, clockPtr-> nanosec);
                 outputLines++;
@@ -166,7 +169,7 @@ void manager(int maxProcsInSys)
             if(message.msgDetails == requestResource)
             {
                 //Write the request to the log file for verbose
-                if(outputLines < 100000)
+                if(outputLines < 100000 && verbose == 1)
                 {
                     fprintf(filePtr, "Oss has detected P%d requesting R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                     outputLines++;
@@ -180,7 +183,7 @@ void manager(int maxProcsInSys)
                         //Grant the request for resource and send message to process that it was granted
                         resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
                         messageToProcess(message.sendingProcess, grantedRequest);
-                        if(outputLines < 100000)
+                        if(outputLines < 100000 && verbose == 1)
                         {
                             fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                             outputLines++;
@@ -191,7 +194,7 @@ void manager(int maxProcsInSys)
                     {
                         resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
                         messageToProcess(message.sendingProcess, denyRequest);
-                        if(outputLines < 100000)
+                        if(outputLines < 100000 && verbose == 1)
                         {
                             fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                             outputLines++;
@@ -206,7 +209,7 @@ void manager(int maxProcsInSys)
                     resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
                     //Let child know the request was granted
                     messageToProcess(message.sendingProcess, grantedRequest);
-                    if(outputLines < 100000)
+                    if(outputLines < 100000 && verbose == 1)
                     {
                         fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                         outputLines++;
@@ -218,7 +221,7 @@ void manager(int maxProcsInSys)
                     //Add one to the request for the process and send deny message to child
                     resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
                     messageToProcess(message.sendingProcess, denyRequest);
-                    if(outputLines < 100000)
+                    if(outputLines < 100000 && verbose == 1)
                     {
                         fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                         outputLines++;
@@ -237,7 +240,7 @@ void manager(int maxProcsInSys)
                         resDescPtr-> allocatedVector[message.resource] += 1;
                     resDescPtr-> allocatedMatrix[message.process][message.resource] -= 1;
                     messageToProcess(message.sendingProcess, grantedRequest);
-                    if(outputLines < 100000)
+                    if(outputLines < 100000 && verbose == 1)
                     {
                         fprintf(filePtr, "Oss has acknowledged P%d releasing R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                         outputLines++;
@@ -261,7 +264,7 @@ void manager(int maxProcsInSys)
                 pidArr[message.process] = -1;
                 procCounter -= 1;
                 pid = waitpid(message.sendingProcess, NULL, 0);
-                if(outputLines < 100000)
+                if(outputLines < 100000 && verbose == 1)
                 {
                     fprintf(filePtr, "Oss has acknowledged P%d terminating at time %d:%d\n", message.process, clockPtr-> sec, clockPtr-> nanosec);
                     outputLines++;
@@ -485,12 +488,12 @@ void displayHelpMessage()
     printf("See below for the options:\n\n");
     printf("-h    : Instructions for running the project and terminate.\n"); 
     printf("-n x  : Number of processes allowed in the system at once (Default: 18).\n");
-    printf("-o filename  : Option to specify the output log file name (Default: ossOutputLog.dat).\n");
+    printf("-v    : Option to turn verbose on: indicates requests and releases of resources (Default: off).\n");
     printf("\n---------------------------------------------------------\n");
     printf("Examples of how to run program(default and with options):\n\n");
     printf("$ make\n");
     printf("$ ./oss\n");
-    printf("$ ./oss -n 10 -o outputLog.dat\n");
+    printf("$ ./oss -n 10 -v\n");
     printf("$ make clean\n");
     printf("\n---------------------------------------------------------\n"); 
     exit(0);
