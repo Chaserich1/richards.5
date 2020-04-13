@@ -18,6 +18,8 @@
 #include <stdbool.h>
 #include <signal.h>
 #include <math.h>
+#include <semaphore.h>
+#include <fcntl.h>
 
 void displayHelpMessage(); //-h getopt option
 void sigHandler(int sig); //Signal Handle(ctrl c and timeout)

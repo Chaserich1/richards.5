@@ -24,7 +24,10 @@ int main(int argc, char *argv[])
     {
         perror("user: Error: Failed to attach clock (shmat)");
         exit(EXIT_FAILURE);
-    }       
+    }      
+    
+    sem_t* sem;
+    char *semaphoreName = "semUser";
 
     clksim startClock;
     clksim totalClock;
@@ -102,6 +105,17 @@ int main(int argc, char *argv[])
         }
  
     }
+    //Open the semaphore and increment the shared memory clock
+    sem = sem_open(semaphoreName, O_CREAT, 0700, 1);    
+    if(sem == SEM_FAILED)
+    {
+        perror("user: Error: Failed to open semaphore\n");
+        exit(EXIT_FAILURE);
+    }
+    //Increment clock
+    clockIncrementor(clockPtr, 100000);
+    //Signal semaphore
+    sem_unlink(semaphoreName);
 
     return 0;
 }

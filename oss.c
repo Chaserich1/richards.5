@@ -96,6 +96,9 @@ void manager(int maxProcsInSys)
     }
     msg message;
 
+    sem_t *sem;
+    char *semaphoreName = "semOss";
+
     int outputLines = 0; //Counts the lines written to file to make sure we don't have an infinite loop
     int procCounter = 0; //Counts the processes
     int i = 0; //For loops
@@ -272,8 +275,18 @@ void manager(int maxProcsInSys)
                 printf("Not sure yet\n");
             }
         }        
-
+        
+        //Open the semaphore for writing to shared memory clock
+        sem = sem_open(semaphoreName, O_CREAT, 0644, 1);
+        if(sem == SEM_FAILED)
+        {
+            perror("oss: Error: Failed to open semaphore (sem_open)\n");
+            exit(EXIT_FAILURE);
+        }
+        //Increment the clock
         clockIncrementor(clockPtr, 1000000);
+        //Signal the semaphore we are finished
+        sem_post(sem);
     }    
     
     return;
@@ -430,6 +443,8 @@ void removeAllMem()
     shmctl(resDescSegment, IPC_RMID, NULL);   
     shmctl(clockSegment, IPC_RMID, NULL);
     msgctl(msgqSegment, IPC_RMID, NULL);
+    sem_unlink("semOss");
+    sem_unlink("semUser");
     kill(0, SIGTERM);
     fclose(filePtr);
     exit(EXIT_SUCCESS);
@@ -443,7 +458,7 @@ void sigHandler(int sig)
     if(sig == SIGALRM)
     {
         printf("Timer is up.\n"); 
-        printf("Killing children, removing shared memory and message queue.\n");
+        printf("Killing children, removing shared memory, semaphore and message queue.\n");
         removeAllMem();
         exit(EXIT_SUCCESS);
     }
@@ -451,7 +466,7 @@ void sigHandler(int sig)
     if(sig == SIGINT)
     {
         printf("Ctrl-c was entered\n");
-        printf("Killing children, removing shared memory and message queue\n");
+        printf("Killing children, removing shared memory, semaphore and message queue\n");
         removeAllMem();
         exit(EXIT_SUCCESS);
     }
