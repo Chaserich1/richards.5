@@ -43,6 +43,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+/* Does the fork, exec and handles the messaging to and from user */
 void manager(int maxProcsInSys)
 {
     filePtr = openLogFile(outputLog); //open the output file
@@ -103,13 +104,13 @@ void manager(int maxProcsInSys)
     int procCounter = 0; //Counts the processes
     int i = 0; //For loops
     int processExec; //exec  nd check for failurei
-    int deadlockDetector = 0;
-    int procPid;
-    int pid;    
-    char msgqSegmentStr[10];
-    char procPidStr[3];
-    sprintf(msgqSegmentStr, "%d", msgqSegment);    
-
+    int deadlockDetector = 0; //deadlock flag
+    int procPid; //generated pid
+    int pid; //actual pid
+    char msgqSegmentStr[10]; //for execing to the child
+    char procPidStr[3]; //for execing the generated pid to child
+    sprintf(msgqSegmentStr, "%d", msgqSegment);
+    //Array of the pids in the generated pids index, initialized to -1 for available
     int *pidArr;
     pidArr = (int *)malloc(sizeof(int) * maxProcsInSys);
     for(i = 0; i < maxProcsInSys; i++)
@@ -174,9 +175,9 @@ void manager(int maxProcsInSys)
                 if(resDescPtr-> resSharedVector[message.resource] == 1)
                 {
                     //Make sure it doesn't have more than it should
-                    if(resDescPtr-> allocatedMatrix[message.process][message.resource] < 5)
+                    if(resDescPtr-> allocatedMatrix[message.process][message.resource] < 4)
                     {
-                        //Grant the request for resource
+                        //Grant the request for resource and send message to process that it was granted
                         resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
                         messageToProcess(message.sendingProcess, grantedRequest);
                         if(outputLines < 100000)
@@ -185,7 +186,7 @@ void manager(int maxProcsInSys)
                             outputLines++;
                         }                
                     }
-                    //Otherwise deny the request and 
+                    //Otherwise deny the request and send denied message to process
                     else
                     {
                         resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
@@ -197,11 +198,13 @@ void manager(int maxProcsInSys)
                         }   
                     }
                 }
-                /* Requesting a nonshareable resource */
+                /* Requesting a nonshareable resource, check if it's available */
                 else if(resDescPtr-> allocatedVector[message.resource] > 0)
                 {
+                    //Remove it from the allocated vector and add it to the matrix for the process
                     resDescPtr-> allocatedVector[message.resource] -= 1;
                     resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
+                    //Let child know the request was granted
                     messageToProcess(message.sendingProcess, grantedRequest);
                     if(outputLines < 100000)
                     {
@@ -212,6 +215,7 @@ void manager(int maxProcsInSys)
                 /* Otherwise there are not enough of the nonshareable resource available */
                 else
                 {
+                    //Add one to the request for the process and send deny message to child
                     resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
                     messageToProcess(message.sendingProcess, denyRequest);
                     if(outputLines < 100000)
@@ -225,10 +229,10 @@ void manager(int maxProcsInSys)
             /* If the message is for releasing resources */
             else if(message.msgDetails == releaseResource)
             {
-                //If there is resources allocated
+                //If there are resources allocated to the process
                 if(resDescPtr-> allocatedMatrix[message.process][message.resource] > 0)
                 {
-                    //If it's not shared, release, and let the process know
+                    //If it's not shared, release, remove from allocated matrix and let the process know
                     if(resDescPtr-> resSharedVector[message.resource] == 0)
                         resDescPtr-> allocatedVector[message.resource] += 1;
                     resDescPtr-> allocatedMatrix[message.process][message.resource] -= 1;
@@ -247,12 +251,13 @@ void manager(int maxProcsInSys)
                 //Resources are available once again
                 for(i = 0; i < 20; i++)
                 {
+                    //Removce all of the requests and allocated (release all resources)
                     if(resDescPtr-> resSharedVector[i] == 0)
                         resDescPtr-> allocatedVector[i] += resDescPtr-> allocatedMatrix[message.process][i];
                     resDescPtr-> allocatedMatrix[message.process][i] = 0;
                     resDescPtr-> requestingMatrix[message.process][i] = 0;
                 }
-                //The simulated pid is available now
+                //The simulated pid is available now, wait for process completion
                 pidArr[message.process] = -1;
                 procCounter -= 1;
                 pid = waitpid(message.sendingProcess, NULL, 0);

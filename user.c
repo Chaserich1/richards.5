@@ -26,13 +26,14 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }      
     
+    //Semaphore declarations 
     sem_t* sem;
     char *semaphoreName = "semUser";
 
     clksim startClock;
     clksim totalClock;
-    const int chanceOfTermProcess = 50;
-    const int chanceOfReqResources = 55;
+    const int chanceOfTermProcess = 40;
+    const int chanceOfReqResources = 60;
     int rCounter;
     int replyToOss;
     int boundB;   
@@ -76,10 +77,17 @@ int main(int argc, char *argv[])
                 rCounter++;
                 procsResources[resource]++;
             }
-            //If the reuqest is denied wait
+            //If the reuqest is denied wait to receive a message
             else if(replyToOss == denyRequest)
             {
-                waiting(process);
+                int receivemessage;
+                //waiting(process);
+                receivemessage = msgrcv(msgqSegment, &message, sizeof(msg), process, 0);
+                if(receivemessage == -1)
+                {
+                    perror("user: Error: Failed to receive message (msgrcv)\n");
+                    exit(EXIT_FAILURE);
+                }
                 rCounter++;
                 procsResources[resource]++;
             }
@@ -113,7 +121,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     //Increment clock
-    clockIncrementor(clockPtr, 100000);
+    clockIncrementor(clockPtr, 10000000);
     //Signal semaphore
     sem_unlink(semaphoreName);
 
@@ -188,6 +196,7 @@ void terminateToOss(int process, int procPid)
     return;
 }
 
+/* Come into waiting to wait for the message back from oss */
 void waiting(int process)
 {
     msg message;
