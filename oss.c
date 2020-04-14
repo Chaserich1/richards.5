@@ -105,7 +105,8 @@ void manager(int maxProcsInSys, int verbose)
 
     int outputLines = 0; //Counts the lines written to file to make sure we don't have an infinite loop
     int procCounter = 0; //Counts the processes
-    int i; //For loops
+    int granted = 0;
+    int i, j; //For loops
     int processExec; //exec  nd check for failurei
     int deadlockDetector = 0; //deadlock flag
     int procPid; //generated pid
@@ -184,6 +185,7 @@ void manager(int maxProcsInSys, int verbose)
                     {
                         //Grant the request for resource and send message to process that it was granted
                         resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
+                        granted++;
                         messageToProcess(message.sendingProcess, grantedRequest);
                         if(outputLines < 100000 && verbose == 1)
                         {
@@ -210,6 +212,7 @@ void manager(int maxProcsInSys, int verbose)
                     resDescPtr-> allocatedVector[message.resource] -= 1;
                     resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
                     //Let child know the request was granted
+                    granted++;
                     messageToProcess(message.sendingProcess, grantedRequest);
                     if(outputLines < 100000 && verbose == 1)
                     {
@@ -274,6 +277,26 @@ void manager(int maxProcsInSys, int verbose)
             }
         }
       
+        /* Every 20 granted requests, print the allocation matrix */ 
+        if(granted % 20 == 0 && granted != 0)
+        {
+            printMatrix((*resDescPtr), maxProcsInSys, 20);
+            outputLines += 19;
+        }
+        /*
+        for(i = 0; i < 18; i++)
+        {
+            for(j = 0; j < 20; j++)
+            {
+                granted += resDescPtr-> allocatedMatrix[i][j];
+                if(granted >= 20)
+                {
+                    printMatrix((*resDescPtr), maxProcsInSys, 20);
+                    outputLines += 19;
+                    break;   
+                }
+            }
+        }*/        
 
         //Check for a deadlock every second
         if(clockPtr-> nanosec == 0)
