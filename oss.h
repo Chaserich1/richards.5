@@ -28,6 +28,7 @@ FILE* openLogFile(char *file); //Opens the output log file
 FILE* filePtr;
 void manager(int, int);
 int genProcPid(int *pidArr, int totalPids); //Generates the pid (0,1,2,3,4,..17) 
+ 
 
 //Shared memory keys and shared memory segment ids
 const key_t resDescKey = 122032;
@@ -163,5 +164,6 @@ void resDescConstruct(resDesc *descPtr)
 //Prototypes for deadlock checking from notes and deadlock resolution
 int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int *procCounter, int *outputLines);
 int req_lt_avail(int req[], int avail[], int shared[], int held[]);
+void printAllocatedMatrix(int allocatedMatrix[18][20], int processes, int resources);                                   void printMatrix(resDesc resDescPtr, int processes, int resources); 
 
 #endif

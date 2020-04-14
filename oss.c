@@ -119,6 +119,8 @@ void manager(int maxProcsInSys, int verbose)
     for(i = 0; i < maxProcsInSys; i++)
         pidArr[i] = -1;
 
+    printMatrix((*resDescPtr), maxProcsInSys, 20);
+    outputLines += 19;
 
     //Loop runs constantly until it has to terminate
     while(1)
@@ -271,7 +273,7 @@ void manager(int maxProcsInSys, int verbose)
                 }
             }
         }
-        
+      
 
         //Check for a deadlock every second
         if(clockPtr-> nanosec == 0)
@@ -280,7 +282,8 @@ void manager(int maxProcsInSys, int verbose)
             deadlockDetector = deadlock(resDescPtr, maxProcsInSys, clockPtr, pidArr, &procCounter, &outputLines);
             if(deadlockDetector == 1 && outputLines < 100000)
             {
-                printf("Not sure yet\n");
+                printMatrix((*resDescPtr), maxProcsInSys, 20);
+                outputLines += 19;
             }
         }        
         
@@ -431,6 +434,37 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
         return 1;
     }
     return 0;   
+}
+
+/* Print Allocation Matrix according to the assignment sheet */
+void printAllocatedMatrix(int allocatedMatrix[18][20], int processes, int resources)
+{
+    int mRow, mColumn;
+    fprintf(filePtr, "Allocated Matrix\n   ");
+    for(mColumn = 0; mColumn < resources; mColumn++)
+    {
+        fprintf(filePtr, "R%-2d ", mColumn);
+    }
+    fprintf(filePtr, "\n");
+    for(mRow = 0; mRow < processes; mRow++)
+    {
+        fprintf(filePtr, "P%-2d ", mRow);
+        for(mColumn = 0; mColumn < resources; mColumn++)
+        {
+            if(allocatedMatrix[mRow][mColumn] == 0)
+                fprintf(filePtr, "0   ");
+            else
+                fprintf(filePtr, "%-3d ", allocatedMatrix[mRow][mColumn]);           
+        }
+        fprintf(filePtr, "\n");
+    }
+    return;
+}
+
+void printMatrix(resDesc resDescPtr, int processes, int resources)
+{
+    printAllocatedMatrix(resDescPtr.allocatedMatrix, processes, resources);
+    return;
 }
 
 /* Open the log file that contains the output and check for failure */
