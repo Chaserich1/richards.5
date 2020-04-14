@@ -51,7 +51,7 @@ typedef struct
     long typeofMsg;
     int process;
     int resource;
-    int sendingProcess;
+    int processesPid;
     int msgDetails;
 } msg;
 //Prototypes for different messages to and from oss and user
@@ -75,8 +75,8 @@ void clockIncrementor(clksim *simTime, int incrementor)
     simTime-> nanosec += incrementor;
     if(simTime-> nanosec >= 1000000000)
     {
-        simTime-> sec += 1;
         simTime-> nanosec -= 1000000000;
+        simTime-> sec += 1;
     }
 }
 
@@ -91,6 +91,8 @@ clksim subTime(clksim time1, clksim time2)
     }
     return sub;
 }
+
+
 //Start time for the next process (between 1 and 500 milliseconds)
 clksim nextProcessStartTime(clksim maxTime, clksim curTime);
 

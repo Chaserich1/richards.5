@@ -40,11 +40,13 @@ int main(int argc, char* argv[])
     /* Signal for terminating, freeing up shared mem, killing all 
        children if the user enters ctrl-c */
     signal(SIGINT, sigHandler);  
-
+    
     manager(n, verbose); //Call scheduler function
     removeAllMem(); //Remove all shared memory, message queue, kill children, close file
     return 0;
 }
+//Stats
+ int granted = 0;                                                                                                        int normalTerminations = 0;                                                                                             int deadlockTerminations = 0;                                                                                           int deadlockAlgRuns = 0;
 
 /* Does the fork, exec and handles the messaging to and from user */
 void manager(int maxProcsInSys, int verbose)
@@ -105,7 +107,11 @@ void manager(int maxProcsInSys, int verbose)
 
     int outputLines = 0; //Counts the lines written to file to make sure we don't have an infinite loop
     int procCounter = 0; //Counts the processes
-    int granted = 0;
+
+    //Statistics
+    int granted1;
+    int totalProcs = 0;
+
     int i, j; //For loops
     int processExec; //exec  nd check for failurei
     int deadlockDetector = 0; //deadlock flag
@@ -153,6 +159,7 @@ void manager(int maxProcsInSys, int verbose)
                     removeAllMem();
                 }
             }
+            totalProcs++;
             procCounter++;
             //Put the pid in the pid array in the spot based on the generated pid
             pidArr[procPid] = pid;
@@ -186,7 +193,7 @@ void manager(int maxProcsInSys, int verbose)
                         //Grant the request for resource and send message to process that it was granted
                         resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
                         granted++;
-                        messageToProcess(message.sendingProcess, grantedRequest);
+                        messageToProcess(message.processesPid, grantedRequest);
                         if(outputLines < 100000 && verbose == 1)
                         {
                             fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
@@ -197,7 +204,7 @@ void manager(int maxProcsInSys, int verbose)
                     else
                     {
                         resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
-                        messageToProcess(message.sendingProcess, denyRequest);
+                        messageToProcess(message.processesPid, denyRequest);
                         if(outputLines < 100000 && verbose == 1)
                         {
                             fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
@@ -213,7 +220,7 @@ void manager(int maxProcsInSys, int verbose)
                     resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
                     //Let child know the request was granted
                     granted++;
-                    messageToProcess(message.sendingProcess, grantedRequest);
+                    messageToProcess(message.processesPid, grantedRequest);
                     if(outputLines < 100000 && verbose == 1)
                     {
                         fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
@@ -225,7 +232,7 @@ void manager(int maxProcsInSys, int verbose)
                 {
                     //Add one to the request for the process and send deny message to child
                     resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
-                    messageToProcess(message.sendingProcess, denyRequest);
+                    messageToProcess(message.processesPid, denyRequest);
                     if(outputLines < 100000 && verbose == 1)
                     {
                         fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
@@ -244,7 +251,7 @@ void manager(int maxProcsInSys, int verbose)
                     if(resDescPtr-> resSharedVector[message.resource] == 0)
                         resDescPtr-> allocatedVector[message.resource] += 1;
                     resDescPtr-> allocatedMatrix[message.process][message.resource] -= 1;
-                    messageToProcess(message.sendingProcess, grantedRequest);
+                    messageToProcess(message.processesPid, grantedRequest);
                     if(outputLines < 100000 && verbose == 1)
                     {
                         fprintf(filePtr, "Oss has acknowledged P%d releasing R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
@@ -268,18 +275,20 @@ void manager(int maxProcsInSys, int verbose)
                 //The simulated pid is available now, wait for process completion
                 pidArr[message.process] = -1;
                 procCounter -= 1;
-                pid = waitpid(message.sendingProcess, NULL, 0);
+                normalTerminations++;
+                pid = waitpid(message.processesPid, NULL, 0);
                 if(outputLines < 100000 && verbose == 1)
                 {
-                    fprintf(filePtr, "Oss has acknowledged P%d terminating at time %d:%d\n", message.process, clockPtr-> sec, clockPtr-> nanosec);
+                    fprintf(filePtr, "Oss has acknowledged P%d terminating normally at time %d:%d\n", message.process, clockPtr-> sec, clockPtr-> nanosec);
                     outputLines++;
                 }
             }
         }
-      
+       
         /* Every 20 granted requests, print the allocation matrix */ 
-        if(granted % 20 == 0 && granted != 0)
+        if(granted % 20 == 0 && granted != 0 && granted != granted1 && verbose == 1)
         {
+            granted1 = granted;
             printMatrix((*resDescPtr), maxProcsInSys, 20);
             outputLines += 19;
         }
@@ -303,8 +312,9 @@ void manager(int maxProcsInSys, int verbose)
         {
             //printf("Check for deadlock");
             deadlockDetector = deadlock(resDescPtr, maxProcsInSys, clockPtr, pidArr, &procCounter, &outputLines);
+            deadlockAlgRuns++;       
             if(deadlockDetector == 1 && outputLines < 100000)
-            {
+            { 
                 printMatrix((*resDescPtr), maxProcsInSys, 20);
                 outputLines += 19;
             }
@@ -318,13 +328,18 @@ void manager(int maxProcsInSys, int verbose)
             exit(EXIT_FAILURE);
         }
         //Increment the clock
-        clockIncrementor(clockPtr, 10000000);
+        clockIncrementor(clockPtr, 1000000);
         //Signal the semaphore we are finished
         sem_post(sem);
     }    
     
-    return;
-   
+    printf("Total Granted Requests: %d\n", granted);
+    printf("Total Normal Terminations: %d\n", normalTerminations);
+    printf("Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns);
+    printf("Total Deadlock Terminations: %d\n", deadlockTerminations);
+    printf("Pecentage of processes in deadlock that had to terminate on avg: \n");
+    
+    return;  
 }
 
 //Generate a simulated process pid between 0-18
@@ -357,7 +372,7 @@ void messageToProcess(int receiver, int response)
 {
     int sendmessage;
     //Process is -1 because we didn't generate one, no resource, oss is sending process of 1
-    msg message = {.typeofMsg = receiver, .msgDetails = response, .process = -1, .resource = -1, .sendingProcess = 1};
+    msg message = {.typeofMsg = receiver, .msgDetails = response, .process = -1, .resource = -1, .processesPid = 1};
     
     //Send the message and check for failure
     sendmessage = msgsnd(msgqSegment, &message, sizeof(msg), 0);
@@ -435,6 +450,7 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
             //Terminate by killing the process
             kill(pidArr[deadlockedProcs[i]], SIGKILL);
             waitpid(pidArr[deadlockedProcs[i]], NULL, 0);
+            deadlockTerminations++;
             //Release the resources
             for(j = 0; j < 20; j++)
             {
@@ -524,6 +540,7 @@ void sigHandler(int sig)
     {
         printf("Timer is up.\n"); 
         printf("Killing children, removing shared memory, semaphore and message queue.\n");
+        printf("Total Granted Requests: %d\n", granted);                                                                        printf("Total Normal Terminations: %d\n", normalTerminations);                                                          printf("Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns);                                                         printf("Total Deadlock Terminations: %d\n", deadlockTerminations);                                                      printf("Pecentage of processes in deadlock that had to terminate on avg: \n"); 
         removeAllMem();
         exit(EXIT_SUCCESS);
     }

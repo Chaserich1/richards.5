@@ -46,17 +46,18 @@ int main(int argc, char *argv[])
     //Starting clock value for the process is now
     startClock = *clockPtr;
 
-    //Continuous loop
+    //Continuous loop until it's time to terminate
     while(1)
     {
         //Get the totaltime for the process and check
         totalClock = subTime((*clockPtr), startClock);
-        if((totalClock.sec >= 1) && (clockPtr-> nanosec % 250000000 == 0))
+        boundB = (rand() % 100) + 1;
+        if(boundB >= 90)
         {
             //Determine if the process is to terminate
             boundB = (rand() % 100) + 1;
             //If it is time to terminate, then send the termination message
-            if(boundB <= 50)
+            if(boundB >= 60)
             {
                 terminateToOss(process, procPid);
                 return 0;               
@@ -64,7 +65,7 @@ int main(int argc, char *argv[])
         }
         //Random chance of requesting a resource
         boundB = (rand() % 100) + 1;
-        if(boundB <= 55)
+        if(boundB >= 35)
         {
             //Get a random resource and request it from oss
             resource = rand() % 20;
@@ -120,7 +121,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     //Increment clock
-    clockIncrementor(clockPtr, 500000);
+    clockIncrementor(clockPtr, 100000);
     //Signal semaphore
     sem_unlink(semaphoreName);
 
@@ -132,7 +133,7 @@ int requestToOss(int process, int procPid, int resource)
 {
     int sendmessage, receivemessage;
     /* Send the message to oss with type 1 and it's a request */
-    msg message = {.typeofMsg = 1, .msgDetails = requestResource, .resource = resource, .process = procPid, .sendingProcess = process};
+    msg message = {.typeofMsg = 1, .msgDetails = requestResource, .resource = resource, .process = procPid, .processesPid = process};
     
     /* Send the message and check for failure */
     sendmessage = msgsnd(msgqSegment, &message, sizeof(msg), 0);
@@ -157,7 +158,7 @@ int releaseToOss(int process, int procPid, int resource)
 {
     int sendmessage, receivemessage;
     /* Send the message to oss with type 1 and it's a request */
-    msg message = {.typeofMsg = 1, .msgDetails = releaseResource, .resource = resource, .process = procPid, .sendingProcess = process};
+    msg message = {.typeofMsg = 1, .msgDetails = releaseResource, .resource = resource, .process = procPid, .processesPid = process};
     
     /* Send the message and check for failure */
     sendmessage = msgsnd(msgqSegment, &message, sizeof(msg), 0);
@@ -182,7 +183,7 @@ void terminateToOss(int process, int procPid)
 {
     int sendmessage, receivemessage;
     /* Send the message to oss with type 1 and it's a request */
-    msg message = {.typeofMsg = 1, .msgDetails = terminateProcess, .process = procPid, .sendingProcess = process};
+    msg message = {.typeofMsg = 1, .msgDetails = terminateProcess, .process = procPid, .processesPid = process};
     
     /* Send the message and check for failure */
     sendmessage = msgsnd(msgqSegment, &message, sizeof(msg), 0);
