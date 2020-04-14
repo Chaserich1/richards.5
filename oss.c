@@ -55,7 +55,7 @@ void manager(int maxProcsInSys, int verbose)
     
     /* Create resource descriptor shared memory */ 
     resDesc *resDescPtr;
-    resDescSegment = shmget(resDescKey, sizeof(int) * maxProcsInSys, IPC_CREAT | 0666);
+    resDescSegment = shmget(resDescKey, sizeof(int) * 18, IPC_CREAT | 0666);
     if(resDescSegment < 0)
     {
         perror("oss: Error: Failed to get resource desriptor segment (shmget)");
@@ -105,7 +105,7 @@ void manager(int maxProcsInSys, int verbose)
 
     int outputLines = 0; //Counts the lines written to file to make sure we don't have an infinite loop
     int procCounter = 0; //Counts the processes
-    int i = 0; //For loops
+    int i; //For loops
     int processExec; //exec  nd check for failurei
     int deadlockDetector = 0; //deadlock flag
     int procPid; //generated pid
@@ -179,8 +179,8 @@ void manager(int maxProcsInSys, int verbose)
                 //Requesting the shared resource
                 if(resDescPtr-> resSharedVector[message.resource] == 1)
                 {
-                    //Make sure it doesn't have more than it should
-                    if(resDescPtr-> allocatedMatrix[message.process][message.resource] < 4)
+                    //Make sure it doesn't have more than (request + allocation)
+                    if(resDescPtr-> allocatedMatrix[message.process][message.resource] < 5)
                     {
                         //Grant the request for resource and send message to process that it was granted
                         resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
@@ -203,7 +203,7 @@ void manager(int maxProcsInSys, int verbose)
                         }   
                     }
                 }
-                /* Requesting a nonshareable resource, check if it's available */
+                /* Requesting a nonshareable resource, check if there are any left */
                 else if(resDescPtr-> allocatedVector[message.resource] > 0)
                 {
                     //Remove it from the allocated vector and add it to the matrix for the process
@@ -217,7 +217,7 @@ void manager(int maxProcsInSys, int verbose)
                         outputLines++;
                     }
                 }
-                /* Otherwise there are not enough of the nonshareable resource available */
+                /* Otherwise there are no instances of the nonshareable resource available */
                 else
                 {
                     //Add one to the request for the process and send deny message to child
@@ -295,7 +295,7 @@ void manager(int maxProcsInSys, int verbose)
             exit(EXIT_FAILURE);
         }
         //Increment the clock
-        clockIncrementor(clockPtr, 1000000);
+        clockIncrementor(clockPtr, 10000000);
         //Signal the semaphore we are finished
         sem_post(sem);
     }    

@@ -26,7 +26,7 @@ void sigHandler(int sig); //Signal Handle(ctrl c and timeout)
 void removeAllMem(); //Removes all sharedmemory
 FILE* openLogFile(char *file); //Opens the output log file
 FILE* filePtr;
-void manager(int, int);
+void manager(int, int); //resource manager
 int genProcPid(int *pidArr, int totalPids); //Generates the pid (0,1,2,3,4,..17) 
  
 
@@ -59,7 +59,6 @@ void messageToProcess(int receiver, int response);
 int requestToOss(int process, int procPid, int resource);
 int releaseToOss(int process, int procPid, int resource);
 void terminateToOss(int process, int procPid);
-void waiting(int process);
 
 /* ------------------------------Simulated Clock Setup----------------------------------- */
 
@@ -81,18 +80,7 @@ void clockIncrementor(clksim *simTime, int incrementor)
     }
 }
 
-//For adding and subtracting the virtual clock times
-clksim addTime(clksim time1, clksim time2)
-{
-    clksim sum = {.sec = time1.sec + time2.sec, .nanosec = time1.nanosec + time2.nanosec};
-    if(sum.nanosec >= 1000000000)
-    {
-        sum.nanosec -= 1000000000;
-        sum.sec += 1;
-    }
-    return sum;
-}
-
+//For subtracting the virtual clock times
 clksim subTime(clksim time1, clksim time2)
 {
     clksim sub = {.sec = time1.sec - time2.sec, .nanosec = time1.nanosec - time2.nanosec};
@@ -161,7 +149,7 @@ void resDescConstruct(resDesc *descPtr)
     }
     return;
 }
-//Prototypes for deadlock checking from notes and deadlock resolution
+//Prototypes for deadlock checking from notes and deadlock resolution and for printing allocated matrix
 int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int *procCounter, int *outputLines);
 int req_lt_avail(int req[], int avail[], int shared[], int held[]);
 void printAllocatedMatrix(int allocatedMatrix[18][20], int processes, int resources);                                   void printMatrix(resDesc resDescPtr, int processes, int resources); 

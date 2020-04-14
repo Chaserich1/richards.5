@@ -32,12 +32,9 @@ int main(int argc, char *argv[])
 
     clksim startClock;
     clksim totalClock;
-    const int chanceOfTermProcess = 40;
-    const int chanceOfReqResources = 60;
     int rCounter;
     int replyToOss;
     int boundB;   
- 
     int procPid, resource, process;
     msgqSegment = atoi(argv[1]);
     procPid = atoi(argv[2]);
@@ -59,7 +56,7 @@ int main(int argc, char *argv[])
             //Determine if the process is to terminate
             boundB = (rand() % 100) + 1;
             //If it is time to terminate, then send the termination message
-            if(boundB <= chanceOfTermProcess)
+            if(boundB <= 50)
             {
                 terminateToOss(process, procPid);
                 return 0;               
@@ -67,13 +64,14 @@ int main(int argc, char *argv[])
         }
         //Random chance of requesting a resource
         boundB = (rand() % 100) + 1;
-        if(boundB <= chanceOfReqResources)
+        if(boundB <= 55)
         {
             //Get a random resource and request it from oss
             resource = rand() % 20;
             replyToOss = requestToOss(process, procPid, resource);
             if(replyToOss == grantedRequest)
             {
+                //increment the process resources
                 rCounter++;
                 procsResources[resource]++;
             }
@@ -81,18 +79,19 @@ int main(int argc, char *argv[])
             else if(replyToOss == denyRequest)
             {
                 int receivemessage;
-                //waiting(process);
+                //Wait for the resource
                 receivemessage = msgrcv(msgqSegment, &message, sizeof(msg), process, 0);
                 if(receivemessage == -1)
                 {
                     perror("user: Error: Failed to receive message (msgrcv)\n");
                     exit(EXIT_FAILURE);
                 }
+                //Increment the process resources
                 rCounter++;
                 procsResources[resource]++;
             }
         }
-        /* Else if it has resources then release one */
+        /* Else if it has resources then release */
         else if(procsResources > 0)
         {
             for(i = 0; i < 20; i++)
@@ -121,7 +120,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     //Increment clock
-    clockIncrementor(clockPtr, 10000000);
+    clockIncrementor(clockPtr, 500000);
     //Signal semaphore
     sem_unlink(semaphoreName);
 
@@ -196,15 +195,3 @@ void terminateToOss(int process, int procPid)
     return;
 }
 
-/* Come into waiting to wait for the message back from oss */
-void waiting(int process)
-{
-    msg message;
-    int receivemessage;
-    receivemessage = msgrcv(msgqSegment, &message, sizeof(msg), process, 0);
-    if(receivemessage == -1)
-    {
-        perror("user: Error: Failed to receive message (msgrcv)\n");
-        exit(EXIT_FAILURE);
-    }
-}
