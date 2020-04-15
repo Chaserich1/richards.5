@@ -49,10 +49,10 @@ int main(int argc, char *argv[])
     //Continuous loop until it's time to terminate
     while(1)
     {
-        //Get the totaltime for the process and check
+        //Get the totaltime for the process and check to ensure it's run for at least a second
         totalClock = subTime((*clockPtr), startClock);
         boundB = (rand() % 100) + 1;
-        if(boundB >= 90)
+        if(boundB >= 90 && (totalClock.sec >= 1))
         {
             //Determine if the process is to terminate
             boundB = (rand() % 100) + 1;
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     //Increment clock
-    clockIncrementor(clockPtr, 100000);
+    clockIncrementor(clockPtr, 1000);
     //Signal semaphore
     sem_unlink(semaphoreName);
 

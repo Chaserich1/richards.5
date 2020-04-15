@@ -46,7 +46,10 @@ int main(int argc, char* argv[])
     return 0;
 }
 //Stats
- int granted = 0;                                                                                                        int normalTerminations = 0;                                                                                             int deadlockTerminations = 0;                                                                                           int deadlockAlgRuns = 0;
+int granted = 0;
+int normalTerminations = 0;
+int deadlockTerminations = 0;
+int deadlockAlgRuns = 0;
 
 /* Does the fork, exec and handles the messaging to and from user */
 void manager(int maxProcsInSys, int verbose)
@@ -307,6 +310,7 @@ void manager(int maxProcsInSys, int verbose)
             }
         }*/        
 
+        //printf("%d\n", clockPtr-> nanosec);
         //Check for a deadlock every second
         if(clockPtr-> nanosec == 0)
         {
@@ -333,11 +337,11 @@ void manager(int maxProcsInSys, int verbose)
         sem_post(sem);
     }    
     
-    printf("Total Granted Requests: %d\n", granted);
-    printf("Total Normal Terminations: %d\n", normalTerminations);
-    printf("Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns);
-    printf("Total Deadlock Terminations: %d\n", deadlockTerminations);
-    printf("Pecentage of processes in deadlock that had to terminate on avg: \n");
+    //printf("Total Granted Requests: %d\n", granted);
+    //printf("Total Normal Terminations: %d\n", normalTerminations);
+    //printf("Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns);
+    //printf("Total Deadlock Terminations: %d\n", deadlockTerminations);
+    //printf("Pecentage of processes in deadlock that had to terminate on avg: \n");
     
     return;  
 }
