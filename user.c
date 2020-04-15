@@ -52,12 +52,12 @@ int main(int argc, char *argv[])
         //Get the totaltime for the process and check to ensure it's run for at least a second
         totalClock = subTime((*clockPtr), startClock);
         boundB = (rand() % 100) + 1;
-        if(boundB >= 90 && (totalClock.sec >= 1))
+        if(boundB >= 50 && (totalClock.sec >= 1))
         {
             //Determine if the process is to terminate
             boundB = (rand() % 100) + 1;
             //If it is time to terminate, then send the termination message
-            if(boundB >= 60)
+            if(boundB >= 50)
             {
                 terminateToOss(process, procPid);
                 return 0;               
@@ -70,14 +70,14 @@ int main(int argc, char *argv[])
             //Get a random resource and request it from oss
             resource = rand() % 20;
             replyToOss = requestToOss(process, procPid, resource);
-            if(replyToOss == grantedRequest)
+            if(replyToOss == 3)
             {
                 //increment the process resources
                 rCounter++;
                 procsResources[resource]++;
             }
             //If the reuqest is denied wait to receive a message
-            else if(replyToOss == denyRequest)
+            else if(replyToOss == 4)
             {
                 int receivemessage;
                 //Wait for the resource
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
             }
             //Send the release message to oss and if granted then release the resource
             replyToOss = releaseToOss(process, procPid, resource);
-            if(replyToOss == grantedRequest)
+            if(replyToOss == 3)
             {
                 rCounter--;
                 procsResources[resource]--;
@@ -133,7 +133,7 @@ int requestToOss(int process, int procPid, int resource)
 {
     int sendmessage, receivemessage;
     /* Send the message to oss with type 1 and it's a request */
-    msg message = {.typeofMsg = 1, .msgDetails = requestResource, .resource = resource, .process = procPid, .processesPid = process};
+    msg message = {.typeofMsg = 1, .msgDetails = 0, .resource = resource, .process = procPid, .processesPid = process};
     
     /* Send the message and check for failure */
     sendmessage = msgsnd(msgqSegment, &message, sizeof(msg), 0);
@@ -158,7 +158,7 @@ int releaseToOss(int process, int procPid, int resource)
 {
     int sendmessage, receivemessage;
     /* Send the message to oss with type 1 and it's a request */
-    msg message = {.typeofMsg = 1, .msgDetails = releaseResource, .resource = resource, .process = procPid, .processesPid = process};
+    msg message = {.typeofMsg = 1, .msgDetails = 1, .resource = resource, .process = procPid, .processesPid = process};
     
     /* Send the message and check for failure */
     sendmessage = msgsnd(msgqSegment, &message, sizeof(msg), 0);
@@ -183,7 +183,7 @@ void terminateToOss(int process, int procPid)
 {
     int sendmessage, receivemessage;
     /* Send the message to oss with type 1 and it's a request */
-    msg message = {.typeofMsg = 1, .msgDetails = terminateProcess, .process = procPid, .processesPid = process};
+    msg message = {.typeofMsg = 1, .msgDetails = 2, .process = procPid, .processesPid = process};
     
     /* Send the message and check for failure */
     sendmessage = msgsnd(msgqSegment, &message, sizeof(msg), 0);

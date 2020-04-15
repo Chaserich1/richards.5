@@ -179,7 +179,7 @@ void manager(int maxProcsInSys, int verbose)
         else if((msgrcv(msgqSegment, &message, sizeof(msg), 1, IPC_NOWAIT)) > 0) 
         {
             //printf("Message Handling");
-            if(message.msgDetails == requestResource)
+            if(message.msgDetails == 0)
             {
                 //Write the request to the log file for verbose
                 if(outputLines < 100000 && verbose == 1)
@@ -190,13 +190,13 @@ void manager(int maxProcsInSys, int verbose)
                 //Requesting the shared resource
                 if(resDescPtr-> resSharedVector[message.resource] == 1)
                 {
-                    //Make sure it doesn't have more than (request + allocation)
-                    if(resDescPtr-> allocatedMatrix[message.process][message.resource] < 5)
+                    //Make sure it doesn't have more than available of the shared resource
+                    if(resDescPtr-> allocatedMatrix[message.process][message.resource] < 7)
                     {
                         //Grant the request for resource and send message to process that it was granted
                         resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
                         granted++;
-                        messageToProcess(message.processesPid, grantedRequest);
+                        messageToProcess(message.processesPid, 3);
                         if(outputLines < 100000 && verbose == 1)
                         {
                             fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
@@ -207,7 +207,7 @@ void manager(int maxProcsInSys, int verbose)
                     else
                     {
                         resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
-                        messageToProcess(message.processesPid, denyRequest);
+                        messageToProcess(message.processesPid, 4);
                         if(outputLines < 100000 && verbose == 1)
                         {
                             fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
@@ -223,7 +223,7 @@ void manager(int maxProcsInSys, int verbose)
                     resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
                     //Let child know the request was granted
                     granted++;
-                    messageToProcess(message.processesPid, grantedRequest);
+                    messageToProcess(message.processesPid, 3);
                     if(outputLines < 100000 && verbose == 1)
                     {
                         fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
@@ -235,7 +235,7 @@ void manager(int maxProcsInSys, int verbose)
                 {
                     //Add one to the request for the process and send deny message to child
                     resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
-                    messageToProcess(message.processesPid, denyRequest);
+                    messageToProcess(message.processesPid, 4);
                     if(outputLines < 100000 && verbose == 1)
                     {
                         fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
@@ -245,7 +245,7 @@ void manager(int maxProcsInSys, int verbose)
    
             }
             /* If the message is for releasing resources */
-            else if(message.msgDetails == releaseResource)
+            else if(message.msgDetails == 1)
             {
                 //If there are resources allocated to the process
                 if(resDescPtr-> allocatedMatrix[message.process][message.resource] > 0)
@@ -254,7 +254,7 @@ void manager(int maxProcsInSys, int verbose)
                     if(resDescPtr-> resSharedVector[message.resource] == 0)
                         resDescPtr-> allocatedVector[message.resource] += 1;
                     resDescPtr-> allocatedMatrix[message.process][message.resource] -= 1;
-                    messageToProcess(message.processesPid, grantedRequest);
+                    messageToProcess(message.processesPid, 3);
                     if(outputLines < 100000 && verbose == 1)
                     {
                         fprintf(filePtr, "Oss has acknowledged P%d releasing R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
@@ -263,7 +263,7 @@ void manager(int maxProcsInSys, int verbose)
                 }
             }
             /* If it is time to terminate the process */
-            else if(message.msgDetails == terminateProcess)
+            else if(message.msgDetails == 2)
             {
                 int pid;
                 //Resources are available once again
@@ -316,12 +316,24 @@ void manager(int maxProcsInSys, int verbose)
         {
             //printf("Check for deadlock");
             deadlockDetector = deadlock(resDescPtr, maxProcsInSys, clockPtr, pidArr, &procCounter, &outputLines);
-            deadlockAlgRuns++;       
-            if(deadlockDetector == 1 && outputLines < 100000)
+         
+            if(deadlockAlgRuns <= clockPtr-> sec)
+            {
+                deadlockAlgRuns++;
+            }    
+          
+            while(deadlockDetector == 1 && outputLines < 100000)
             { 
-                printMatrix((*resDescPtr), maxProcsInSys, 20);
-                outputLines += 19;
+                fprintf(filePtr, "   Oss running deadlock detector after process kill\n");
+                outputLines++;
+                deadlockDetector = deadlock(resDescPtr, maxProcsInSys, clockPtr, pidArr, &procCounter, &outputLines);
+                if(deadlockDetector == 0)
+                {
+                    fprintf(filePtr, "   System is no longer in deadlock\n");   
+                    outputLines++;
+                }
             }
+            
         }        
         
         //Open the semaphore for writing to shared memory clock
@@ -414,6 +426,7 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
     int finish[nProcs];
     int deadlockedProcs[nProcs];
     int counter = 0;
+    int releasedValues[20];
 
     for(i = 0; i < 20; i++)
         work[i] = resDescPtr-> allocatedVector[i];
@@ -446,8 +459,9 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
         {
             if((*outputLines) < 100000)
             {
-                fprintf(filePtr, "Oss detected that P%d is deadlocked\n", deadlockedProcs[i]);
-                (*outputLines)++;
+                fprintf(filePtr, "   Oss detected that P%d is deadlocked\n", deadlockedProcs[i]);
+                fprintf(filePtr, "   Attempting to resolve deadlock\n");
+                (*outputLines) += 2;
             }
             
             int j; 
@@ -459,9 +473,14 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
             for(j = 0; j < 20; j++)
             {
                 if(resDescPtr-> resSharedVector[j] == 0)
+                {
                     resDescPtr-> allocatedVector[j] += resDescPtr-> allocatedMatrix[deadlockedProcs[i]][j];
+                    releasedValues[j] += resDescPtr-> allocatedMatrix[deadlockedProcs[i]][j];
+                }
                 resDescPtr-> allocatedMatrix[deadlockedProcs[i]][j] = 0;
                 resDescPtr-> requestingMatrix[deadlockedProcs[i]][j] = 0;
+                //if(releasedValues[j] <= 7 && releasedValues[j] > 0)
+                //    fprintf(filePtr, "      Resources released are: R%d:%d\n", j, releasedValues[j]);
             }
 
             //Add the pid back to the available pids
@@ -470,9 +489,10 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
             
             if((*outputLines) < 100000)
             {
-                fprintf(filePtr, "Oss killing process P%d\n", deadlockedProcs[i]);
+                fprintf(filePtr, "   Oss killing process P%d\n", deadlockedProcs[i]);
                 (*outputLines)++;
             }
+            return 1;
         }
         return 1;
     }

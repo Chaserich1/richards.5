@@ -38,13 +38,6 @@ int resDescSegment, clockSegment, msgqSegment;
 
 /* ---------------------------------Messaging Setup-------------------------------------- */
 
-//Child send to oss
-const int requestResource = 0;
-const int releaseResource = 1;
-const int terminateProcess = 2;
-//Oss sends to child
-const int grantedRequest = 3;
-const int denyRequest = 4;
 //Message structure
 typedef struct
 {
@@ -144,7 +137,7 @@ void resDescConstruct(resDesc *descPtr)
         }
         else
         {
-            descPtr-> totalResourcesVector[i] = randNum;
+            descPtr-> totalResourcesVector[i] = 7;
             descPtr-> allocatedVector[i] = descPtr-> totalResourcesVector[i];
             descPtr-> resSharedVector[i] = 1;
         }       
