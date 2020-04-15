@@ -1,0 +1,84 @@
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+   Oss detected that P0 is deadlocked at time 3:000000000
+   Attempting to resolve deadlock
+   Oss killing process P0
+   Oss running deadlock detector after process kill
+   Oss detected that P4 is deadlocked at time 3:000000000
+   Attempting to resolve deadlock
+   Oss killing process P4
+   Oss running deadlock detector after process kill
+   Oss detected that P10 is deadlocked at time 3:003000000
+   Attempting to resolve deadlock
+   Oss killing process P10
+   Oss running deadlock detector after process kill
+   Oss detected that P11 is deadlocked at time 3:003000000
+   Attempting to resolve deadlock
+   Oss killing process P11
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+   Oss detected that P9 is deadlocked at time 5:000000000
+   Attempting to resolve deadlock
+   Oss killing process P9
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+   Oss detected that P0 is deadlocked at time 6:000000000
+   Attempting to resolve deadlock
+   Oss killing process P0
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+   Oss detected that P1 is deadlocked at time 7:000000000
+   Attempting to resolve deadlock
+   Oss killing process P1
+   Oss running deadlock detector after process kill
+   Oss detected that P6 is deadlocked at time 7:000000000
+   Attempting to resolve deadlock
+   Oss killing process P6
+   Oss running deadlock detector after process kill
+   Oss detected that P12 is deadlocked at time 7:001000000
+   Attempting to resolve deadlock
+   Oss killing process P12
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+   Oss detected that P0 is deadlocked at time 8:000000000
+   Attempting to resolve deadlock
+   Oss killing process P0
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+   Oss detected that P3 is deadlocked at time 10:000000000
+   Attempting to resolve deadlock
+   Oss killing process P3
+   Oss running deadlock detector after process kill
+   Oss detected that P4 is deadlocked at time 10:002000000
+   Attempting to resolve deadlock
+   Oss killing process P4
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+   Oss detected that P5 is deadlocked at time 12:000000000
+   Attempting to resolve deadlock
+   Oss killing process P5
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+Total Granted Requests: 108
+Total Normal Terminations: 18
+Total Deadlock Algorithm Runs: 23
+Total Deadlock Terminations: 15
+Pecentage of processes in deadlock that had to terminate on avg: 46%  

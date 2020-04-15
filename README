@@ -54,7 +54,18 @@ requests.
 
 Additional Project Information:
 
-
+1.I left two output files in my project directory: one with -v specified (verbose on) and
+one without -v specified (verbose off).
+2.I had some issue when the -v option is not specified (verbose off). It will randomly not 
+print anything to the file rather than the normal printing of just the deadlock information
+with the detections and how it is resolved. So it may need to be run multiple times to get
+the output in the file and I have not been able to figure out why it doesn't print sometimes.
+3.I played a lot with the incrementation time values and the chances for a process to request,
+release or terminate normally and ultimately decided to just leave it where it is to try to
+get an even amount of deadlock terminations vs normal terminations. 
+4.I currently have both oss and the children running in an infinite loop and I set the timer to
+2 real seconds. Once the 2 second alarm goes off, the program stops, does all the cleanup
+and prints the stats to the screen.
 
 -------------------------------------------------------------------------------
 

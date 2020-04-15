@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
     process = getpid();
     int procsResources[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};    
 
-    srand(time(0) + (clockPtr-> nanosec / 100000) + process);
-    int i; //loops
+    int i; // loops
+    srand(time(0) + (clockPtr-> nanosec / 500000) + 100000);
     //Starting clock value for the process is now
     startClock = *clockPtr;
 
@@ -52,12 +52,12 @@ int main(int argc, char *argv[])
         //Get the totaltime for the process and check to ensure it's run for at least a second
         totalClock = subTime((*clockPtr), startClock);
         boundB = (rand() % 100) + 1;
-        if(boundB >= 10 && (totalClock.sec >= 1))
+        if(boundB >= 60 && (totalClock.sec >= 1))
         {
             //Determine if the process is to terminate
             boundB = (rand() % 100) + 1;
             //If it is time to terminate, then send the termination message
-            if(boundB >= 50)
+            if(boundB >= 25)
             {
                 terminateToOss(process, procPid);
                 return 0;               
@@ -112,19 +112,19 @@ int main(int argc, char *argv[])
             }
         }
  
+    
+        //Open the semaphore and increment the shared memory clock
+        sem = sem_open(semaphoreName, O_CREAT, 0700, 1);    
+        if(sem == SEM_FAILED)
+        {
+            perror("user: Error: Failed to open semaphore\n");
+            exit(EXIT_FAILURE);
+        }
+        //Increment clock
+        clockIncrementor(clockPtr, 1000000);
+        //Signal semaphore
+        sem_unlink(semaphoreName);
     }
-    //Open the semaphore and increment the shared memory clock
-    sem = sem_open(semaphoreName, O_CREAT, 0700, 1);    
-    if(sem == SEM_FAILED)
-    {
-        perror("user: Error: Failed to open semaphore\n");
-        exit(EXIT_FAILURE);
-    }
-    //Increment clock
-    clockIncrementor(clockPtr, 1000);
-    //Signal semaphore
-    sem_unlink(semaphoreName);
-
     return 0;
 }
 

@@ -1,0 +1,961 @@
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+OSS has spawned process P0 at time 0:000000000
+Oss has detected P0 requesting R0 at time 0:071000000
+Oss granting P0 request for R0 at time 0:071000000
+Oss has detected P0 requesting R3 at time 0:097000000
+Oss granting P0 request for R3 at time 0:097000000
+Oss has acknowledged P0 releasing R0 at time 0:107000000
+Oss has acknowledged P0 releasing R3 at time 0:116000000
+Oss has detected P0 requesting R18 at time 0:125000000
+Oss granting P0 request for R18 at time 0:125000000
+Oss has acknowledged P0 releasing R18 at time 0:133000000
+Oss has detected P0 requesting R10 at time 0:143000000
+Oss granting P0 request for R10 at time 0:143000000
+Oss has detected P0 requesting R11 at time 0:152000000
+Oss granting P0 request for R11 at time 0:152000000
+Oss has detected P0 requesting R12 at time 0:160000000
+Oss granting P0 request for R12 at time 0:160000000
+Oss has detected P0 requesting R11 at time 0:168000000
+Oss granting P0 request for R11 at time 0:168000000
+Oss has acknowledged P0 releasing R10 at time 0:177000000
+Oss has acknowledged P0 releasing R11 at time 0:186000000
+Oss has acknowledged P0 releasing R11 at time 0:193000000
+Oss has detected P0 requesting R3 at time 0:201000000
+Oss granting P0 request for R3 at time 0:201000000
+Oss has detected P0 requesting R8 at time 0:211000000
+Oss granting P0 request for R8 at time 0:211000000
+Oss has detected P0 requesting R17 at time 0:220000000
+Oss granting P0 request for R17 at time 0:220000000
+Oss has detected P0 requesting R18 at time 0:227000000
+Oss granting P0 request for R18 at time 0:227000000
+Oss has detected P0 requesting R1 at time 0:235000000
+Oss granting P0 request for R1 at time 0:235000000
+Oss has acknowledged P0 releasing R1 at time 0:242000000
+Oss has detected P0 requesting R14 at time 0:249000000
+Oss granting P0 request for R14 at time 0:249000000
+Oss has detected P0 requesting R4 at time 0:258000000
+Oss granting P0 request for R4 at time 0:258000000
+Oss has detected P0 requesting R14 at time 0:266000000
+Oss granting P0 request for R14 at time 0:266000000
+Oss has acknowledged P0 releasing R3 at time 0:273000000
+Oss has detected P0 requesting R10 at time 0:282000000
+Oss granting P0 request for R10 at time 0:282000000
+Oss has detected P0 requesting R5 at time 0:290000000
+Oss granting P0 request for R5 at time 0:290000000
+Oss has acknowledged P0 releasing R4 at time 0:299000000
+Oss has detected P0 requesting R2 at time 0:307000000
+Oss granting P0 request for R2 at time 0:307000000
+Oss has acknowledged P0 releasing R2 at time 0:314000000
+Oss has acknowledged P0 releasing R5 at time 0:324000000
+Oss has detected P0 requesting R6 at time 0:333000000
+Oss granting P0 request for R6 at time 0:333000000
+OSS has spawned process P1 at time 0:336000000
+Oss has acknowledged P0 releasing R6 at time 0:337000000
+Oss has acknowledged P0 releasing R8 at time 0:353000000
+Oss has detected P0 requesting R6 at time 0:364000000
+Oss granting P0 request for R6 at time 0:364000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   1   0   0   0   1   0   1   0   2   0   0   1   1   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has detected P0 requesting R1 at time 0:372000000
+Oss granting P0 request for R1 at time 0:372000000
+Oss has acknowledged P0 releasing R1 at time 0:382000000
+Oss has detected P0 requesting R2 at time 0:390000000
+Oss granting P0 request for R2 at time 0:390000000
+Oss has acknowledged P0 releasing R2 at time 0:400000000
+OSS has spawned process P2 at time 0:402000000
+Oss has acknowledged P0 releasing R6 at time 0:403000000
+Oss has detected P0 requesting R8 at time 0:419000000
+Oss granting P0 request for R8 at time 0:419000000
+Oss has detected P0 requesting R3 at time 0:429000000
+Oss granting P0 request for R3 at time 0:429000000
+Oss has acknowledged P0 releasing R3 at time 0:436000000
+Oss has acknowledged P0 releasing R8 at time 0:445000000
+Oss has detected P0 requesting R4 at time 0:453000000
+Oss granting P0 request for R4 at time 0:453000000
+Oss has detected P0 requesting R18 at time 0:463000000
+Oss granting P0 request for R18 at time 0:463000000
+Oss has detected P0 requesting R16 at time 0:472000000
+Oss granting P0 request for R16 at time 0:472000000
+Oss has detected P0 requesting R9 at time 0:481000000
+Oss granting P0 request for R9 at time 0:481000000
+Oss has detected P1 requesting R15 at time 0:488000000
+Oss granting P1 request for R15 at time 0:488000000
+Oss has acknowledged P0 releasing R4 at time 0:489000000
+Oss has acknowledged P0 releasing R9 at time 0:498000000
+Oss has acknowledged P0 releasing R10 at time 0:508000000
+Oss has detected P0 requesting R14 at time 0:517000000
+Oss granting P0 request for R14 at time 0:517000000
+Oss has detected P0 requesting R15 at time 0:526000000
+Oss granting P0 request for R15 at time 0:526000000
+Oss has acknowledged P0 releasing R12 at time 0:534000000
+Oss has detected P0 requesting R14 at time 0:543000000
+Oss granting P0 request for R14 at time 0:543000000
+Oss has acknowledged P0 releasing R14 at time 0:553000000
+Oss has acknowledged P0 releasing R14 at time 0:561000000
+Oss has acknowledged P0 releasing R14 at time 0:572000000
+Oss has acknowledged P0 releasing R14 at time 0:581000000
+Oss has acknowledged P0 releasing R15 at time 0:589000000
+Oss has detected P0 requesting R9 at time 0:599000000
+Oss granting P0 request for R9 at time 0:599000000
+Oss has acknowledged P0 releasing R9 at time 0:607000000
+Oss has acknowledged P0 releasing R16 at time 0:615000000
+Oss has detected P0 requesting R1 at time 0:624000000
+Oss granting P0 request for R1 at time 0:624000000
+Oss has acknowledged P0 releasing R1 at time 0:632000000
+Oss has acknowledged P0 releasing R17 at time 0:640000000
+Oss has detected P0 requesting R11 at time 0:649000000
+Oss granting P0 request for R11 at time 0:649000000
+Oss has detected P0 requesting R12 at time 0:656000000
+Oss granting P0 request for R12 at time 0:656000000
+Oss has detected P0 requesting R4 at time 0:664000000
+Oss granting P0 request for R4 at time 0:664000000
+Oss has detected P0 requesting R12 at time 0:672000000
+Oss granting P0 request for R12 at time 0:672000000
+Oss has detected P0 requesting R18 at time 0:680000000
+Oss granting P0 request for R18 at time 0:680000000
+Oss has detected P0 requesting R13 at time 0:688000000
+Oss granting P0 request for R13 at time 0:688000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   1   0   0   0   0   0   0   1   2   1   0   0   0   0   3   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1   0   0   0   0   
+P2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has detected P0 requesting R18 at time 0:696000000
+Oss granting P0 request for R18 at time 0:696000000
+Oss has acknowledged P0 releasing R4 at time 0:705000000
+Oss has detected P0 requesting R0 at time 0:715000000
+Oss granting P0 request for R0 at time 0:715000000
+Oss has acknowledged P0 releasing R0 at time 0:724000000
+Oss has detected P0 requesting R3 at time 0:733000000
+Oss granting P0 request for R3 at time 0:733000000
+Oss has detected P0 requesting R15 at time 0:743000000
+Oss granting P0 request for R15 at time 0:743000000
+Oss has detected P0 requesting R19 at time 0:752000000
+Oss granting P0 request for R19 at time 0:752000000
+Oss has acknowledged P0 releasing R3 at time 0:761000000
+Oss has detected P0 requesting R0 at time 0:769000000
+Oss granting P0 request for R0 at time 0:769000000
+Oss has detected P0 requesting R9 at time 0:777000000
+Oss granting P0 request for R9 at time 0:777000000
+Oss has acknowledged P0 releasing R0 at time 0:785000000
+Oss has acknowledged P0 releasing R9 at time 0:794000000
+Oss has acknowledged P0 releasing R11 at time 0:802000000
+Oss has acknowledged P0 releasing R12 at time 0:812000000
+Oss has detected P0 requesting R11 at time 0:820000000
+Oss granting P0 request for R11 at time 0:820000000
+Oss has detected P0 requesting R6 at time 0:827000000
+Oss granting P0 request for R6 at time 0:827000000
+Oss has detected P0 requesting R10 at time 0:836000000
+Oss granting P0 request for R10 at time 0:836000000
+Oss has acknowledged P0 releasing R6 at time 0:844000000
+OSS has spawned process P3 at time 0:847000000
+Oss has acknowledged P0 releasing R10 at time 0:848000000
+Oss has acknowledged P0 releasing R11 at time 0:864000000
+Oss has detected P0 requesting R12 at time 0:873000000
+Oss granting P0 request for R12 at time 0:873000000
+Oss has detected P0 requesting R19 at time 0:881000000
+Oss granting P0 request for R19 at time 0:881000000
+Oss has detected P0 requesting R9 at time 0:890000000
+Oss granting P0 request for R9 at time 0:890000000
+Oss has detected P0 requesting R13 at time 0:900000000
+Oss granting P0 request for R13 at time 0:900000000
+Oss has detected P0 requesting R6 at time 0:909000000
+Oss granting P0 request for R6 at time 0:909000000
+Oss has detected P0 requesting R16 at time 0:919000000
+Oss granting P0 request for R16 at time 0:919000000
+Oss has detected P0 requesting R7 at time 0:930000000
+Oss granting P0 request for R7 at time 0:930000000
+OSS has spawned process P4 at time 0:938000000
+Oss has acknowledged P0 releasing R6 at time 0:939000000
+Oss has acknowledged P0 releasing R7 at time 1:028000000
+Oss has acknowledged P0 releasing R9 at time 1:037000000
+Oss has acknowledged P0 terminating normally at time 1:046000000
+Oss has detected P2 requesting R4 at time 1:085000000
+Oss granting P2 request for R4 at time 1:085000000
+Oss has acknowledged P1 terminating normally at time 1:107000000
+OSS has spawned process P0 at time 1:108000000
+Oss has detected P2 requesting R10 at time 1:116000000
+Oss granting P2 request for R10 at time 1:116000000
+Oss has detected P2 requesting R9 at time 1:327000000
+Oss granting P2 request for R9 at time 1:327000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   1   0   0   0   0   1   1   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has detected P2 requesting R5 at time 1:346000000
+Oss granting P2 request for R5 at time 1:346000000
+Oss has detected P2 requesting R17 at time 1:355000000
+Oss granting P2 request for R17 at time 1:355000000
+Oss has detected P2 requesting R0 at time 1:365000000
+Oss granting P2 request for R0 at time 1:365000000
+Oss has detected P2 requesting R15 at time 1:374000000
+Oss granting P2 request for R15 at time 1:374000000
+Oss has acknowledged P2 releasing R0 at time 1:384000000
+Oss has acknowledged P2 releasing R4 at time 1:393000000
+Oss has detected P2 requesting R16 at time 1:402000000
+Oss granting P2 request for R16 at time 1:402000000
+Oss has detected P2 requesting R0 at time 1:410000000
+Oss granting P2 request for R0 at time 1:410000000
+Oss has detected P2 requesting R16 at time 1:418000000
+Oss granting P2 request for R16 at time 1:418000000
+Oss has detected P2 requesting R6 at time 1:426000000
+Oss granting P2 request for R6 at time 1:426000000
+Oss has acknowledged P2 releasing R0 at time 1:434000000
+Oss has acknowledged P2 releasing R5 at time 1:442000000
+Oss has detected P2 requesting R10 at time 1:451000000
+Oss granting P2 request for R10 at time 1:451000000
+Oss has acknowledged P2 releasing R6 at time 1:459000000
+Oss has acknowledged P2 releasing R9 at time 1:468000000
+Oss has acknowledged P2 releasing R10 at time 1:475000000
+Oss has acknowledged P2 releasing R10 at time 1:483000000
+Oss has detected P2 requesting R2 at time 1:490000000
+Oss granting P2 request for R2 at time 1:490000000
+Oss has acknowledged P2 releasing R2 at time 1:498000000
+Oss has detected P2 requesting R19 at time 1:508000000
+Oss granting P2 request for R19 at time 1:508000000
+Oss has detected P2 requesting R7 at time 1:516000000
+Oss granting P2 request for R7 at time 1:516000000
+Oss has acknowledged P2 releasing R7 at time 1:525000000
+Oss has detected P2 requesting R13 at time 1:533000000
+Oss granting P2 request for R13 at time 1:533000000
+Oss has acknowledged P2 releasing R13 at time 1:542000000
+Oss has detected P2 requesting R0 at time 1:551000000
+Oss granting P2 request for R0 at time 1:551000000
+Oss has detected P2 requesting R3 at time 1:559000000
+Oss granting P2 request for R3 at time 1:559000000
+Oss has detected P2 requesting R4 at time 1:569000000
+Oss granting P2 request for R4 at time 1:569000000
+Oss has detected P2 requesting R12 at time 1:577000000
+Oss granting P2 request for R12 at time 1:577000000
+Oss has detected P2 requesting R10 at time 1:585000000
+Oss granting P2 request for R10 at time 1:585000000
+Oss has acknowledged P2 releasing R0 at time 1:596000000
+Oss has detected P2 requesting R15 at time 1:604000000
+Oss granting P2 request for R15 at time 1:604000000
+OSS has spawned process P1 at time 1:608000000
+Oss has acknowledged P2 releasing R3 at time 1:609000000
+Oss has detected P2 requesting R9 at time 1:623000000
+Oss granting P2 request for R9 at time 1:623000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   1   0   0   0   0   1   1   0   1   0   0   2   2   1   0   1   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has detected P2 requesting R16 at time 1:629000000
+Oss granting P2 request for R16 at time 1:629000000
+Oss has acknowledged P2 releasing R4 at time 1:639000000
+Oss has detected P2 requesting R15 at time 1:646000000
+Oss denying P2 request for R15 at time 1:646000000
+Oss has detected P0 requesting R10 at time 1:772000000
+Oss granting P0 request for R10 at time 1:772000000
+Oss has detected P1 requesting R10 at time 1:773000000
+Oss granting P1 request for R10 at time 1:773000000
+Oss has detected P0 requesting R2 at time 1:790000000
+Oss granting P0 request for R2 at time 1:790000000
+Oss has detected P0 requesting R7 at time 1:799000000
+Oss granting P0 request for R7 at time 1:799000000
+Oss has acknowledged P0 releasing R2 at time 1:806000000
+Oss has acknowledged P0 releasing R7 at time 1:814000000
+Oss has detected P0 requesting R17 at time 1:822000000
+Oss granting P0 request for R17 at time 1:822000000
+Oss has acknowledged P0 releasing R10 at time 1:831000000
+Oss has acknowledged P0 releasing R17 at time 1:839000000
+Oss has detected P0 requesting R17 at time 1:847000000
+Oss granting P0 request for R17 at time 1:847000000
+Oss has detected P0 requesting R6 at time 1:856000000
+Oss granting P0 request for R6 at time 1:856000000
+Oss has acknowledged P0 releasing R6 at time 1:872000000
+Oss has detected P0 requesting R16 at time 1:882000000
+Oss granting P0 request for R16 at time 1:882000000
+Oss has detected P0 requesting R7 at time 1:890000000
+Oss granting P0 request for R7 at time 1:890000000
+Oss has detected P0 requesting R1 at time 1:898000000
+Oss granting P0 request for R1 at time 1:898000000
+Oss has detected P0 requesting R0 at time 1:905000000
+Oss granting P0 request for R0 at time 1:905000000
+Oss has detected P0 requesting R17 at time 1:912000000
+Oss granting P0 request for R17 at time 1:912000000
+Oss has detected P0 requesting R0 at time 1:921000000
+Oss granting P0 request for R0 at time 1:921000000
+Oss has detected P0 requesting R12 at time 1:930000000
+Oss granting P0 request for R12 at time 1:930000000
+Oss has acknowledged P0 releasing R0 at time 1:938000000
+Oss has acknowledged P0 releasing R0 at time 1:946000000
+Oss has acknowledged P0 releasing R1 at time 1:954000000
+Oss has detected P0 requesting R12 at time 1:961000000
+Oss denying P0 request for R12 at time 1:961000000
+OSS has spawned process P5 at time 1:972000000
+   Oss detected that P0 is deadlocked at time 2:000000000
+   Attempting to resolve deadlock
+   Oss killing process P0
+   Oss running deadlock detector after process kill
+   Oss detected that P2 is deadlocked at time 2:000000000
+   Attempting to resolve deadlock
+   Oss killing process P2
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+OSS has spawned process P0 at time 2:022000000
+Oss has detected P1 requesting R2 at time 2:029000000
+Oss granting P1 request for R2 at time 2:029000000
+Oss has detected P1 requesting R7 at time 2:037000000
+Oss granting P1 request for R7 at time 2:037000000
+Oss has acknowledged P1 releasing R2 at time 2:047000000
+Oss has acknowledged P1 releasing R7 at time 2:055000000
+Oss has acknowledged P1 releasing R10 at time 2:063000000
+Oss has detected P1 requesting R10 at time 2:072000000
+Oss granting P1 request for R10 at time 2:072000000
+Oss has detected P1 requesting R17 at time 2:081000000
+Oss granting P1 request for R17 at time 2:081000000
+Oss has acknowledged P1 terminating normally at time 2:089000000
+OSS has spawned process P1 at time 2:365000000
+OSS has spawned process P2 at time 2:389000000
+Oss has detected P1 requesting R11 at time 2:429000000
+Oss granting P1 request for R11 at time 2:429000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   1   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has detected P1 requesting R13 at time 2:449000000
+Oss granting P1 request for R13 at time 2:449000000
+Oss has acknowledged P1 releasing R11 at time 2:458000000
+Oss has acknowledged P1 releasing R13 at time 2:466000000
+OSS has spawned process P6 at time 2:715000000
+Oss has detected P6 requesting R17 at time 2:783000000
+Oss granting P6 request for R17 at time 2:783000000
+Oss has detected P6 requesting R19 at time 2:804000000
+Oss granting P6 request for R19 at time 2:804000000
+Oss has detected P6 requesting R19 at time 2:812000000
+Oss granting P6 request for R19 at time 2:812000000
+Oss has detected P6 requesting R8 at time 2:820000000
+Oss granting P6 request for R8 at time 2:820000000
+Oss has acknowledged P6 releasing R8 at time 2:828000000
+Oss has detected P6 requesting R10 at time 2:835000000
+Oss granting P6 request for R10 at time 2:835000000
+Oss has detected P6 requesting R19 at time 2:842000000
+Oss granting P6 request for R19 at time 2:842000000
+Oss has acknowledged P6 releasing R10 at time 2:850000000
+Oss has detected P6 requesting R19 at time 2:857000000
+Oss granting P6 request for R19 at time 2:857000000
+Oss has detected P6 requesting R7 at time 2:865000000
+Oss granting P6 request for R7 at time 2:865000000
+Oss has acknowledged P6 releasing R7 at time 2:875000000
+Oss has detected P6 requesting R3 at time 2:883000000
+Oss granting P6 request for R3 at time 2:883000000
+Oss has detected P6 requesting R12 at time 2:892000000
+Oss granting P6 request for R12 at time 2:892000000
+Oss has detected P6 requesting R4 at time 2:899000000
+Oss granting P6 request for R4 at time 2:899000000
+Oss has acknowledged P6 releasing R3 at time 2:908000000
+Oss has detected P6 requesting R17 at time 2:914000000
+Oss granting P6 request for R17 at time 2:914000000
+Oss has detected P6 requesting R13 at time 2:921000000
+Oss granting P6 request for R13 at time 2:921000000
+Oss has acknowledged P6 releasing R4 at time 2:929000000
+Oss has detected P6 requesting R19 at time 2:937000000
+Oss granting P6 request for R19 at time 2:937000000
+Oss has acknowledged P6 releasing R12 at time 2:945000000
+OSS has spawned process P7 at time 2:954000000
+Oss has detected P6 requesting R14 at time 2:955000000
+Oss granting P6 request for R14 at time 2:955000000
+Oss has detected P6 requesting R19 at time 2:969000000
+Oss granting P6 request for R19 at time 2:969000000
+Oss has detected P6 requesting R5 at time 2:977000000
+Oss granting P6 request for R5 at time 2:977000000
+Oss has detected P6 requesting R6 at time 2:985000000
+Oss granting P6 request for R6 at time 2:985000000
+Oss has acknowledged P6 releasing R5 at time 2:994000000
+Oss has acknowledged P6 terminating normally at time 3:002000000
+OSS has spawned process P6 at time 3:398000000
+Oss has detected P6 requesting R9 at time 3:468000000
+Oss granting P6 request for R9 at time 3:468000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   0   0   0   0   0   0   0   1   0   0   0   0   0   0   0   0   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has detected P6 requesting R13 at time 3:486000000
+Oss granting P6 request for R13 at time 3:486000000
+Oss has detected P6 requesting R5 at time 3:495000000
+Oss granting P6 request for R5 at time 3:495000000
+Oss has detected P6 requesting R5 at time 3:504000000
+Oss denying P6 request for R5 at time 3:504000000
+OSS has spawned process P8 at time 3:857000000
+Oss has detected P8 requesting R5 at time 3:927000000
+Oss denying P8 request for R5 at time 3:927000000
+OSS has spawned process P9 at time 3:939000000
+OSS has spawned process P10 at time 3:990000000
+   Oss detected that P6 is deadlocked at time 4:000000000
+   Attempting to resolve deadlock
+   Oss killing process P6
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+Oss has detected P9 requesting R0 at time 4:071000000
+Oss granting P9 request for R0 at time 4:071000000
+Oss has detected P2 requesting R18 at time 4:075000000
+Oss granting P2 request for R18 at time 4:075000000
+Oss has detected P2 requesting R7 at time 4:097000000
+Oss granting P2 request for R7 at time 4:097000000
+Oss has acknowledged P2 releasing R7 at time 4:107000000
+Oss has acknowledged P2 releasing R18 at time 4:118000000
+Oss has detected P2 requesting R4 at time 4:128000000
+Oss granting P2 request for R4 at time 4:128000000
+Oss has acknowledged P2 releasing R4 at time 4:136000000
+Oss has detected P2 requesting R10 at time 4:145000000
+Oss granting P2 request for R10 at time 4:145000000
+Oss has detected P2 requesting R8 at time 4:154000000
+Oss granting P2 request for R8 at time 4:154000000
+Oss has detected P2 requesting R3 at time 4:162000000
+Oss granting P2 request for R3 at time 4:162000000
+Oss has acknowledged P2 releasing R3 at time 4:170000000
+Oss has acknowledged P2 releasing R8 at time 4:178000000
+Oss has acknowledged P2 releasing R10 at time 4:187000000
+Oss has detected P2 requesting R1 at time 4:196000000
+Oss granting P2 request for R1 at time 4:196000000
+Oss has detected P2 requesting R18 at time 4:205000000
+Oss granting P2 request for R18 at time 4:205000000
+Oss has detected P2 requesting R8 at time 4:212000000
+Oss granting P2 request for R8 at time 4:212000000
+Oss has detected P2 requesting R16 at time 4:220000000
+Oss granting P2 request for R16 at time 4:220000000
+Oss has acknowledged P2 releasing R1 at time 4:228000000
+Oss has detected P2 requesting R18 at time 4:239000000
+Oss granting P2 request for R18 at time 4:239000000
+Oss has detected P2 requesting R0 at time 4:248000000
+Oss granting P2 request for R0 at time 4:248000000
+Oss has acknowledged P2 releasing R0 at time 4:257000000
+Oss has detected P2 requesting R9 at time 4:265000000
+Oss granting P2 request for R9 at time 4:265000000
+Oss has acknowledged P2 releasing R8 at time 4:272000000
+Oss has detected P2 requesting R4 at time 4:280000000
+Oss granting P2 request for R4 at time 4:280000000
+Oss has acknowledged P2 releasing R4 at time 4:287000000
+Oss has detected P2 requesting R1 at time 4:296000000
+Oss granting P2 request for R1 at time 4:296000000
+Oss has detected P2 requesting R14 at time 4:305000000
+Oss granting P2 request for R14 at time 4:305000000
+OSS has spawned process P6 at time 4:312000000
+Oss has detected P2 requesting R5 at time 4:313000000
+Oss granting P2 request for R5 at time 4:313000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   1   0   0   0   1   0   0   0   1   0   0   0   0   1   0   1   0   2   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has acknowledged P2 releasing R1 at time 4:327000000
+Oss has detected P2 requesting R11 at time 4:335000000
+Oss granting P2 request for R11 at time 4:335000000
+Oss has detected P2 requesting R5 at time 4:344000000
+Oss denying P2 request for R5 at time 4:344000000
+Oss has detected P6 requesting R0 at time 4:466000000
+Oss granting P6 request for R0 at time 4:466000000
+OSS has spawned process P11 at time 4:595000000
+Oss has detected P11 requesting R9 at time 4:675000000
+Oss granting P11 request for R9 at time 4:675000000
+Oss has detected P11 requesting R5 at time 4:698000000
+Oss denying P11 request for R5 at time 4:698000000
+   Oss detected that P2 is deadlocked at time 5:000000000
+   Attempting to resolve deadlock
+   Oss killing process P2
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+OSS has spawned process P2 at time 5:087000000
+OSS has spawned process P12 at time 5:123000000
+OSS has spawned process P13 at time 5:162000000
+Oss has detected P2 requesting R8 at time 5:229000000
+Oss granting P2 request for R8 at time 5:229000000
+OSS has spawned process P14 at time 5:235000000
+Oss has acknowledged P2 releasing R8 at time 5:316000000
+OSS has spawned process P15 at time 5:323000000
+Oss has detected P2 requesting R5 at time 5:324000000
+Oss granting P2 request for R5 at time 5:324000000
+Oss has acknowledged P9 terminating normally at time 5:326000000
+Oss has detected P2 requesting R6 at time 5:327000000
+Oss granting P2 request for R6 at time 5:327000000
+Oss has detected P12 requesting R7 at time 5:394000000
+Oss granting P12 request for R7 at time 5:394000000
+Oss has acknowledged P2 releasing R5 at time 5:405000000
+Oss has detected P12 requesting R2 at time 5:426000000
+Oss granting P12 request for R2 at time 5:426000000
+Oss has detected P2 requesting R6 at time 5:433000000
+Oss granting P2 request for R6 at time 5:433000000
+OSS has spawned process P9 at time 5:438000000
+Oss has detected P2 requesting R3 at time 5:440000000
+Oss granting P2 request for R3 at time 5:440000000
+Oss has acknowledged P12 releasing R2 at time 5:445000000
+Oss has detected P2 requesting R18 at time 5:452000000
+Oss granting P2 request for R18 at time 5:452000000
+Oss has detected P12 requesting R1 at time 5:461000000
+Oss granting P12 request for R1 at time 5:461000000
+Oss has detected P2 requesting R13 at time 5:468000000
+Oss granting P2 request for R13 at time 5:468000000
+Oss has detected P12 requesting R4 at time 5:475000000
+Oss granting P12 request for R4 at time 5:475000000
+Oss has acknowledged P2 releasing R3 at time 5:482000000
+Oss has detected P12 requesting R16 at time 5:490000000
+Oss granting P12 request for R16 at time 5:490000000
+Oss has detected P2 requesting R14 at time 5:498000000
+Oss granting P2 request for R14 at time 5:498000000
+Oss has acknowledged P12 releasing R1 at time 5:505000000
+Oss has detected P2 requesting R6 at time 5:512000000
+Oss denying P2 request for R6 at time 5:512000000
+Oss has detected P12 requesting R12 at time 5:521000000
+Oss granting P12 request for R12 at time 5:521000000
+Oss has acknowledged P12 releasing R4 at time 5:529000000
+Oss has acknowledged P12 releasing R7 at time 5:538000000
+Oss has acknowledged P12 releasing R12 at time 5:546000000
+Oss has acknowledged P12 releasing R16 at time 5:554000000
+OSS has spawned process P16 at time 5:756000000
+Oss has acknowledged P6 releasing R0 at time 5:828000000
+Oss has acknowledged P6 terminating normally at time 5:848000000
+Oss has detected P14 requesting R19 at time 5:897000000
+Oss granting P14 request for R19 at time 5:897000000
+Oss has acknowledged P14 releasing R19 at time 5:920000000
+   Oss detected that P2 is deadlocked at time 6:000000000
+   Attempting to resolve deadlock
+   Oss killing process P2
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+Oss has detected P15 requesting R2 at time 6:134000000
+Oss granting P15 request for R2 at time 6:134000000
+Oss has detected P15 requesting R14 at time 6:157000000
+Oss granting P15 request for R14 at time 6:157000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   1   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   1   0   0   0   0   0   0   0   0   0   0   0   1   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has acknowledged P15 releasing R2 at time 6:164000000
+Oss has acknowledged P15 releasing R14 at time 6:173000000
+Oss has detected P15 requesting R5 at time 6:182000000
+Oss granting P15 request for R5 at time 6:182000000
+Oss has detected P15 requesting R2 at time 6:189000000
+Oss granting P15 request for R2 at time 6:189000000
+Oss has detected P15 requesting R14 at time 6:198000000
+Oss granting P15 request for R14 at time 6:198000000
+Oss has detected P15 requesting R19 at time 6:209000000
+Oss granting P15 request for R19 at time 6:209000000
+Oss has detected P15 requesting R18 at time 6:217000000
+Oss granting P15 request for R18 at time 6:217000000
+Oss has detected P15 requesting R9 at time 6:226000000
+Oss granting P15 request for R9 at time 6:226000000
+Oss has detected P15 requesting R7 at time 6:235000000
+Oss granting P15 request for R7 at time 6:235000000
+Oss has detected P15 requesting R2 at time 6:243000000
+Oss denying P15 request for R2 at time 6:243000000
+OSS has spawned process P2 at time 6:247000000
+Oss has detected P2 requesting R1 at time 6:324000000
+Oss granting P2 request for R1 at time 6:324000000
+Oss has acknowledged P2 releasing R1 at time 6:348000000
+OSS has spawned process P6 at time 6:363000000
+Oss has detected P6 requesting R9 at time 6:440000000
+Oss granting P6 request for R9 at time 6:440000000
+Oss has detected P6 requesting R10 at time 6:463000000
+Oss granting P6 request for R10 at time 6:463000000
+Oss has detected P6 requesting R10 at time 6:472000000
+Oss granting P6 request for R10 at time 6:472000000
+Oss has detected P6 requesting R6 at time 6:481000000
+Oss granting P6 request for R6 at time 6:481000000
+Oss has detected P6 requesting R17 at time 6:489000000
+Oss granting P6 request for R17 at time 6:489000000
+Oss has detected P6 requesting R4 at time 6:497000000
+Oss granting P6 request for R4 at time 6:497000000
+Oss has detected P6 requesting R3 at time 6:504000000
+Oss granting P6 request for R3 at time 6:504000000
+Oss has detected P6 requesting R2 at time 6:513000000
+Oss denying P6 request for R2 at time 6:513000000
+OSS has spawned process P17 at time 6:675000000
+   Oss detected that P6 is deadlocked at time 7:000000000
+   Attempting to resolve deadlock
+   Oss killing process P6
+   Oss running deadlock detector after process kill
+   Oss detected that P8 is deadlocked at time 7:000000000
+   Attempting to resolve deadlock
+   Oss killing process P8
+   Oss running deadlock detector after process kill
+   Oss detected that P11 is deadlocked at time 7:000000000
+   Attempting to resolve deadlock
+   Oss killing process P11
+   Oss running deadlock detector after process kill
+   Oss detected that P15 is deadlocked at time 7:000000000
+   Attempting to resolve deadlock
+   Oss killing process P15
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+OSS has spawned process P6 at time 7:138000000
+Oss has detected P6 requesting R15 at time 7:212000000
+Oss granting P6 request for R15 at time 7:212000000
+Oss has acknowledged P6 releasing R15 at time 7:233000000
+Oss has detected P6 requesting R18 at time 7:242000000
+Oss granting P6 request for R18 at time 7:242000000
+OSS has spawned process P8 at time 7:249000000
+Oss has detected P6 requesting R15 at time 7:250000000
+Oss granting P6 request for R15 at time 7:250000000
+OSS has spawned process P11 at time 7:258000000
+Oss has detected P6 requesting R9 at time 7:259000000
+Oss granting P6 request for R9 at time 7:259000000
+Oss has acknowledged P6 releasing R9 at time 7:267000000
+OSS has spawned process P15 at time 7:275000000
+Oss has acknowledged P6 releasing R15 at time 7:276000000
+Oss has detected P6 requesting R0 at time 7:355000000
+Oss granting P6 request for R0 at time 7:355000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has acknowledged P6 releasing R0 at time 7:361000000
+Oss has detected P6 requesting R15 at time 7:372000000
+Oss granting P6 request for R15 at time 7:372000000
+Oss has detected P6 requesting R7 at time 7:380000000
+Oss granting P6 request for R7 at time 7:380000000
+Oss has acknowledged P6 releasing R7 at time 7:388000000
+Oss has detected P6 requesting R14 at time 7:397000000
+Oss granting P6 request for R14 at time 7:397000000
+Oss has detected P6 requesting R6 at time 7:405000000
+Oss granting P6 request for R6 at time 7:405000000
+Oss has detected P6 requesting R2 at time 7:413000000
+Oss granting P6 request for R2 at time 7:413000000
+Oss has detected P6 requesting R11 at time 7:421000000
+Oss granting P6 request for R11 at time 7:421000000
+Oss has acknowledged P6 releasing R2 at time 7:430000000
+Oss has acknowledged P6 releasing R6 at time 7:438000000
+Oss has detected P6 requesting R3 at time 7:447000000
+Oss granting P6 request for R3 at time 7:447000000
+Oss has acknowledged P6 releasing R3 at time 7:456000000
+Oss has detected P6 requesting R0 at time 7:464000000
+Oss granting P6 request for R0 at time 7:464000000
+Oss has detected P6 requesting R3 at time 7:473000000
+Oss granting P6 request for R3 at time 7:473000000
+Oss has detected P6 requesting R19 at time 7:482000000
+Oss granting P6 request for R19 at time 7:482000000
+Oss has detected P6 requesting R15 at time 7:489000000
+Oss granting P6 request for R15 at time 7:489000000
+Oss has detected P6 requesting R3 at time 7:499000000
+Oss granting P6 request for R3 at time 7:499000000
+Oss has detected P6 requesting R10 at time 7:508000000
+Oss granting P6 request for R10 at time 7:508000000
+Oss has detected P6 requesting R3 at time 7:517000000
+Oss granting P6 request for R3 at time 7:517000000
+Oss has acknowledged P6 releasing R0 at time 7:526000000
+Oss has acknowledged P6 releasing R3 at time 7:534000000
+Oss has acknowledged P6 releasing R3 at time 7:542000000
+Oss has detected P6 requesting R18 at time 7:550000000
+Oss granting P6 request for R18 at time 7:550000000
+Oss has detected P6 requesting R2 at time 7:557000000
+Oss granting P6 request for R2 at time 7:557000000
+Oss has acknowledged P6 releasing R2 at time 7:568000000
+Oss has acknowledged P6 releasing R3 at time 7:577000000
+Oss has detected P6 requesting R6 at time 7:585000000
+Oss granting P6 request for R6 at time 7:585000000
+Oss has detected P6 requesting R13 at time 7:594000000
+Oss granting P6 request for R13 at time 7:594000000
+Oss has acknowledged P6 releasing R6 at time 7:602000000
+Oss has acknowledged P6 releasing R10 at time 7:610000000
+Oss has detected P6 requesting R0 at time 7:617000000
+Oss granting P6 request for R0 at time 7:617000000
+Oss has detected P6 requesting R5 at time 7:625000000
+Oss granting P6 request for R5 at time 7:625000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  1   0   0   0   0   1   0   0   0   0   0   1   0   1   1   2   0   0   2   1   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has detected P6 requesting R13 at time 7:630000000
+Oss granting P6 request for R13 at time 7:630000000
+Oss has detected P6 requesting R17 at time 7:639000000
+Oss granting P6 request for R17 at time 7:639000000
+Oss has detected P6 requesting R9 at time 7:646000000
+Oss granting P6 request for R9 at time 7:646000000
+Oss has detected P6 requesting R13 at time 7:655000000
+Oss granting P6 request for R13 at time 7:655000000
+Oss has detected P6 requesting R0 at time 7:665000000
+Oss granting P6 request for R0 at time 7:665000000
+Oss has detected P6 requesting R18 at time 7:673000000
+Oss granting P6 request for R18 at time 7:673000000
+Oss has detected P6 requesting R4 at time 7:682000000
+Oss granting P6 request for R4 at time 7:682000000
+Oss has acknowledged P6 releasing R0 at time 7:690000000
+Oss has detected P6 requesting R0 at time 7:699000000
+Oss granting P6 request for R0 at time 7:699000000
+Oss has detected P6 requesting R5 at time 7:709000000
+Oss denying P6 request for R5 at time 7:709000000
+   Oss detected that P6 is deadlocked at time 8:000000000
+   Attempting to resolve deadlock
+   Oss killing process P6
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+OSS has spawned process P6 at time 8:001000000
+Oss has detected P11 requesting R14 at time 8:046000000
+Oss granting P11 request for R14 at time 8:046000000
+Oss has acknowledged P11 releasing R14 at time 8:068000000
+Oss has detected P6 requesting R18 at time 8:193000000
+Oss granting P6 request for R18 at time 8:193000000
+Oss has detected P6 requesting R4 at time 8:214000000
+Oss granting P6 request for R4 at time 8:214000000
+Oss has acknowledged P6 releasing R4 at time 8:221000000
+Oss has detected P6 requesting R10 at time 8:229000000
+Oss granting P6 request for R10 at time 8:229000000
+Oss has detected P6 requesting R17 at time 8:238000000
+Oss granting P6 request for R17 at time 8:238000000
+Oss has acknowledged P6 releasing R10 at time 8:247000000
+Oss has acknowledged P6 releasing R17 at time 8:256000000
+Oss has acknowledged P6 releasing R18 at time 8:264000000
+Oss has detected P6 requesting R5 at time 8:273000000
+Oss granting P6 request for R5 at time 8:273000000
+Oss has detected P6 requesting R8 at time 8:282000000
+Oss granting P6 request for R8 at time 8:282000000
+Oss has detected P6 requesting R7 at time 8:291000000
+Oss granting P6 request for R7 at time 8:291000000
+Oss has acknowledged P6 releasing R5 at time 8:300000000
+Oss has detected P6 requesting R17 at time 8:309000000
+Oss granting P6 request for R17 at time 8:309000000
+Oss has acknowledged P6 releasing R7 at time 8:316000000
+Oss has detected P6 requesting R2 at time 8:324000000
+Oss granting P6 request for R2 at time 8:324000000
+Oss has detected P6 requesting R13 at time 8:332000000
+Oss granting P6 request for R13 at time 8:332000000
+Oss has detected P6 requesting R10 at time 8:341000000
+Oss granting P6 request for R10 at time 8:341000000
+Allocated Matrix
+   R0  R1  R2  R3  R4  R5  R6  R7  R8  R9  R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 
+P0  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P6  0   0   1   0   0   0   0   0   1   0   1   0   0   1   0   0   0   1   0   0   
+P7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P10 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P11 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P12 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P13 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P14 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P15 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P16 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+P17 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+Oss has acknowledged P6 releasing R2 at time 8:348000000
+Oss has acknowledged P6 releasing R8 at time 8:356000000
+Oss has acknowledged P6 releasing R10 at time 8:364000000
+Oss has detected P6 requesting R7 at time 8:373000000
+Oss granting P6 request for R7 at time 8:373000000
+Oss has detected P6 requesting R15 at time 8:383000000
+Oss granting P6 request for R15 at time 8:383000000
+Oss has detected P6 requesting R2 at time 8:390000000
+Oss granting P6 request for R2 at time 8:390000000
+Oss has detected P6 requesting R7 at time 8:398000000
+Oss granting P6 request for R7 at time 8:398000000
+Oss has detected P6 requesting R12 at time 8:406000000
+Oss granting P6 request for R12 at time 8:406000000
+Oss has detected P6 requesting R2 at time 8:414000000
+Oss denying P6 request for R2 at time 8:414000000
+   Oss detected that P6 is deadlocked at time 9:000000000
+   Attempting to resolve deadlock
+   Oss killing process P6
+   Oss running deadlock detector after process kill
+   System is no longer in deadlock
+OSS has spawned process P6 at time 9:001000000
+Oss has detected P6 requesting R0 at time 9:081000000
+Oss granting P6 request for R0 at time 9:081000000
+Oss has detected P6 requesting R15 at time 9:103000000
+Oss granting P6 request for R15 at time 9:103000000
+Oss has detected P6 requesting R10 at time 9:113000000
+Oss granting P6 request for R10 at time 9:113000000
+Oss has detected P6 requesting R15 at time 9:121000000
+Oss granting P6 request for R15 at time 9:121000000
+Oss has detected P6 requesting R6 at time 9:130000000
+Oss granting P6 request for R6 at time 9:130000000
+Oss has detected P6 requesting R5 at time 9:139000000
+Oss granting P6 request for R5 at time 9:139000000
+Oss has detected P6 requesting R8 at time 9:149000000
+Oss granting P6 request for R8 at time 9:149000000
+Oss has detected P6 requesting R0 at time 9:158000000
+Oss granting P6 request for R0 at time 9:158000000
+Oss has acknowledged P6 releasing R0 at time 9:165000000
+Oss has acknowledged P6 releasing R0 at time 9:177000000
+Oss has detected P6 requesting R15 at time 9:185000000
+Oss denying P6 request for R15 at time 9:185000000
+   Oss detected that P6 is deadlocked at time 10:000000000
+   Attempting to resolve deadlock
+   Oss killi
+Total Granted Requests: 233
+Total Normal Terminations: 6
+Total Deadlock Algorithm Runs: 21
+Total Deadlock Terminations: 12
+Pecentage of processes in deadlock that had to terminate on avg: 54%

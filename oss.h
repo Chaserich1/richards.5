@@ -28,7 +28,8 @@ FILE* openLogFile(char *file); //Opens the output log file
 FILE* filePtr;
 void manager(int, int); //resource manager
 int genProcPid(int *pidArr, int totalPids); //Generates the pid (0,1,2,3,4,..17) 
- 
+void printStats();
+int divideNums(int, int); 
 
 //Shared memory keys and shared memory segment ids
 const key_t resDescKey = 122032;

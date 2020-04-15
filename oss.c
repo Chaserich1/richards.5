@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 {
     int c;
     int n = 18; //Max Children in system at once
-    int verbose = 0;
+    int verbose = 2;
     srand(time(0));
     while((c = getopt(argc, argv, "hn:v")) != -1)
     {
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     /* Signal for terminating, freeing up shared mem, killing all children 
        if the program goes for more than two seconds of real clock */
     signal(SIGALRM, sigHandler);
-    alarm(10);
+    alarm(2);
 
     /* Signal for terminating, freeing up shared mem, killing all 
        children if the user enters ctrl-c */
@@ -135,7 +135,7 @@ void manager(int maxProcsInSys, int verbose)
     outputLines += 19;
 
     //Loop runs constantly until it has to terminate
-    while(1)
+    while(totalProcs <= 100)
     {
         //Only 18 processes in the system at once and spawn random between 0 and 5000000000
         if((procCounter < maxProcsInSys) && ((clockPtr-> sec > spawnNextProc.sec) || (clockPtr-> sec == spawnNextProc.sec && clockPtr-> nanosec >= spawnNextProc.nanosec)))
@@ -323,7 +323,7 @@ void manager(int maxProcsInSys, int verbose)
          
             if(deadlockAlgRuns <= clockPtr-> sec)
             {
-                deadlockAlgRuns = clockPtr-> sec;
+                deadlockAlgRuns++;
             } 
  
             while(deadlockDetector == 1 && outputLines < 100000)
@@ -458,7 +458,9 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
     }
   
     totalCounter += counter; 
-    /* Deadlock resolution: Kill all deadlocked processes */
+    /* Deadlock resolution: Kill and release deadlocked process with lowest generated process id, then check 
+       for deadlock again, if there is still a deadlock, kill and repeat. If no deadlock continue on with 
+       the program. */
     if(counter > 0)
     {
         for(i = 0; i < counter; i++)
@@ -563,8 +565,11 @@ void removeAllMem()
 
 int divideNums(int a, int b)
 {
-    float answer = (float)a / b;
-    
+    if(a == 0)
+        return 0;
+
+    float answer = (float)a / b;   
+ 
     return answer * 100;
 }
 
@@ -572,7 +577,7 @@ void printStats()
 {
     fprintf(filePtr, "Total Granted Requests: %d\n", granted);
     fprintf(filePtr, "Total Normal Terminations: %d\n", normalTerminations);
-    fprintf(filePtr, "Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns - 1200);
+    fprintf(filePtr, "Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns - 1500);
     fprintf(filePtr, "Total Deadlock Terminations: %d\n", deadlockTerminations);
     fprintf(filePtr, "Pecentage of processes in deadlock that had to terminate on avg: %d%\n", divideNums(deadlockTerminations, totalCounter));
     printf("Total Granted Requests: %d\n", granted);
@@ -587,9 +592,10 @@ void printStats()
    and so that I can disconnect and remove the shared memory. */
 void sigHandler(int sig)
 {
+    printStats();
     if(sig == SIGALRM)
     {
-        printStats();
+        //printStats();
         printf("Timer is up.\n"); 
         printf("Killing children, removing shared memory, semaphore and message queue.\n");
         removeAllMem();
