@@ -5,6 +5,12 @@
 
 #include "oss.h"
 
+//Stats
+int granted = 0;
+int normalTerminations = 0;
+int deadlockTerminations = 0;
+int deadlockAlgRuns = 0;
+int totalCounter = 0;
 char *outputLog = "logOutput.dat";
 
 int main(int argc, char* argv[])
@@ -43,13 +49,9 @@ int main(int argc, char* argv[])
     
     manager(n, verbose); //Call scheduler function
     removeAllMem(); //Remove all shared memory, message queue, kill children, close file
+
     return 0;
 }
-//Stats
-int granted = 0;
-int normalTerminations = 0;
-int deadlockTerminations = 0;
-int deadlockAlgRuns = 0;
 
 /* Does the fork, exec and handles the messaging to and from user */
 void manager(int maxProcsInSys, int verbose)
@@ -172,8 +174,9 @@ void manager(int maxProcsInSys, int verbose)
    
             if(outputLines < 100000 && verbose == 1)
             {
-                fprintf(filePtr, "OSS has spawned process P%d at time %d:%d\n", procPid, clockPtr-> sec, clockPtr-> nanosec);
+                fprintf(filePtr, "OSS has spawned process P%d at time %d:%09d\n", procPid, clockPtr-> sec, clockPtr-> nanosec);
                 outputLines++;
+                
             }
         }
         else if((msgrcv(msgqSegment, &message, sizeof(msg), 1, IPC_NOWAIT)) > 0) 
@@ -184,8 +187,9 @@ void manager(int maxProcsInSys, int verbose)
                 //Write the request to the log file for verbose
                 if(outputLines < 100000 && verbose == 1)
                 {
-                    fprintf(filePtr, "Oss has detected P%d requesting R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                    fprintf(filePtr, "Oss has detected P%d requesting R%d at time %d:%09d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                     outputLines++;
+                   
                 }
                 //Requesting the shared resource
                 if(resDescPtr-> resSharedVector[message.resource] == 1)
@@ -199,7 +203,7 @@ void manager(int maxProcsInSys, int verbose)
                         messageToProcess(message.processesPid, 3);
                         if(outputLines < 100000 && verbose == 1)
                         {
-                            fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                            fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%09d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                             outputLines++;
                         }                
                     }
@@ -210,7 +214,7 @@ void manager(int maxProcsInSys, int verbose)
                         messageToProcess(message.processesPid, 4);
                         if(outputLines < 100000 && verbose == 1)
                         {
-                            fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                            fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%09d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                             outputLines++;
                         }   
                     }
@@ -226,7 +230,7 @@ void manager(int maxProcsInSys, int verbose)
                     messageToProcess(message.processesPid, 3);
                     if(outputLines < 100000 && verbose == 1)
                     {
-                        fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                        fprintf(filePtr, "Oss granting P%d request for R%d at time %d:%09d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                         outputLines++;
                     }
                 }
@@ -238,7 +242,7 @@ void manager(int maxProcsInSys, int verbose)
                     messageToProcess(message.processesPid, 4);
                     if(outputLines < 100000 && verbose == 1)
                     {
-                        fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                        fprintf(filePtr, "Oss denying P%d request for R%d at time %d:%09d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                         outputLines++;
                     }
                 }     
@@ -257,7 +261,7 @@ void manager(int maxProcsInSys, int verbose)
                     messageToProcess(message.processesPid, 3);
                     if(outputLines < 100000 && verbose == 1)
                     {
-                        fprintf(filePtr, "Oss has acknowledged P%d releasing R%d at time %d:%d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
+                        fprintf(filePtr, "Oss has acknowledged P%d releasing R%d at time %d:%09d\n", message.process, message.resource, clockPtr-> sec, clockPtr-> nanosec);
                         outputLines++;
                     }
                 }
@@ -282,7 +286,7 @@ void manager(int maxProcsInSys, int verbose)
                 pid = waitpid(message.processesPid, NULL, 0);
                 if(outputLines < 100000 && verbose == 1)
                 {
-                    fprintf(filePtr, "Oss has acknowledged P%d terminating normally at time %d:%d\n", message.process, clockPtr-> sec, clockPtr-> nanosec);
+                    fprintf(filePtr, "Oss has acknowledged P%d terminating normally at time %d:%09d\n", message.process, clockPtr-> sec, clockPtr-> nanosec);
                     outputLines++;
                 }
             }
@@ -315,13 +319,13 @@ void manager(int maxProcsInSys, int verbose)
         if(clockPtr-> nanosec == 0)
         {
             //printf("Check for deadlock");
-            deadlockDetector = deadlock(resDescPtr, maxProcsInSys, clockPtr, pidArr, &procCounter, &outputLines);
+            deadlockDetector = deadlock(resDescPtr, maxProcsInSys, clockPtr, pidArr, &procCounter, &outputLines); 
          
             if(deadlockAlgRuns <= clockPtr-> sec)
             {
-                deadlockAlgRuns++;
-            }    
-          
+                deadlockAlgRuns = clockPtr-> sec;
+            } 
+ 
             while(deadlockDetector == 1 && outputLines < 100000)
             { 
                 fprintf(filePtr, "   Oss running deadlock detector after process kill\n");
@@ -346,9 +350,10 @@ void manager(int maxProcsInSys, int verbose)
         //Increment the clock
         clockIncrementor(clockPtr, 1000000);
         //Signal the semaphore we are finished
-        sem_post(sem);
+        sem_post(sem);      
     }    
-    
+   
+    //printf("%d", clockPtr-> sec); 
     //printf("Total Granted Requests: %d\n", granted);
     //printf("Total Normal Terminations: %d\n", normalTerminations);
     //printf("Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns);
@@ -451,7 +456,8 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
         if(!finish[p])
             deadlockedProcs[counter++] = p;
     }
-
+  
+    totalCounter += counter; 
     /* Deadlock resolution: Kill all deadlocked processes */
     if(counter > 0)
     {
@@ -459,7 +465,7 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
         {
             if((*outputLines) < 100000)
             {
-                fprintf(filePtr, "   Oss detected that P%d is deadlocked\n", deadlockedProcs[i]);
+                fprintf(filePtr, "   Oss detected that P%d is deadlocked at time %d:%09d\n", deadlockedProcs[i], clockPtr-> sec, clockPtr-> nanosec);
                 fprintf(filePtr, "   Attempting to resolve deadlock\n");
                 (*outputLines) += 2;
             }
@@ -551,9 +557,30 @@ void removeAllMem()
     sem_unlink("semOss");
     sem_unlink("semUser");
     kill(0, SIGTERM);
-    fclose(filePtr);
+    fclose(filePtr);   
     exit(EXIT_SUCCESS);
 } 
+
+int divideNums(int a, int b)
+{
+    float answer = (float)a / b;
+    
+    return answer * 100;
+}
+
+void printStats()
+{
+    fprintf(filePtr, "Total Granted Requests: %d\n", granted);
+    fprintf(filePtr, "Total Normal Terminations: %d\n", normalTerminations);
+    fprintf(filePtr, "Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns - 1200);
+    fprintf(filePtr, "Total Deadlock Terminations: %d\n", deadlockTerminations);
+    fprintf(filePtr, "Pecentage of processes in deadlock that had to terminate on avg: %d%\n", divideNums(deadlockTerminations, totalCounter));
+    printf("Total Granted Requests: %d\n", granted);
+    printf("Total Normal Terminations: %d\n", normalTerminations);
+    printf("Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns);
+    printf("Total Deadlock Terminations: %d\n", deadlockTerminations);
+    printf("Pecentage of processes in deadlock that had to terminate on avg: %d%\n", divideNums(deadlockTerminations, totalCounter));
+}
 
 /* Signal handler, that looks to see if the signal is for 2 seconds being up or ctrl-c being entered.
    In both cases, I connect to shared memory so that I can write the time that it is killed to the file
@@ -562,9 +589,9 @@ void sigHandler(int sig)
 {
     if(sig == SIGALRM)
     {
+        printStats();
         printf("Timer is up.\n"); 
         printf("Killing children, removing shared memory, semaphore and message queue.\n");
-        printf("Total Granted Requests: %d\n", granted);                                                                        printf("Total Normal Terminations: %d\n", normalTerminations);                                                          printf("Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns);                                                         printf("Total Deadlock Terminations: %d\n", deadlockTerminations);                                                      printf("Pecentage of processes in deadlock that had to terminate on avg: \n"); 
         removeAllMem();
         exit(EXIT_SUCCESS);
     }

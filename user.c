@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         //Get the totaltime for the process and check to ensure it's run for at least a second
         totalClock = subTime((*clockPtr), startClock);
         boundB = (rand() % 100) + 1;
-        if(boundB >= 50 && (totalClock.sec >= 1))
+        if(boundB >= 10 && (totalClock.sec >= 1))
         {
             //Determine if the process is to terminate
             boundB = (rand() % 100) + 1;
