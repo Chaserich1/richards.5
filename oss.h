@@ -27,7 +27,7 @@ void removeAllMem(); //Removes all sharedmemory
 FILE* openLogFile(char *file); //Opens the output log file
 FILE* filePtr;
 void manager(int, int); //resource manager
-int genProcPid(int *pidArr, int totalPids); //Generates the pid (0,1,2,3,4,..17) 
+int generateProcPid(int *pidArr, int totalPids); //Generates the pid (0,1,2,3,4,..17) 
 void printStats();
 int divideNums(int, int); 
 
@@ -113,7 +113,6 @@ void resDescConstruct(resDesc *descPtr)
 {
     int i, j; //loops
     srand(time(NULL));
-    int randNum = rand() % ((25 + 1) - 15) + 15;
     //Initialize the matrixes to all zeros
     for(i = 0; i < 18; i++)
     {

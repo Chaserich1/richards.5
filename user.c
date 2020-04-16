@@ -8,7 +8,6 @@
 int main(int argc, char *argv[])
 {
     msg message;
-    int receiveMessage, sendMessage;
    
     clksim *clockPtr;    
  
@@ -52,12 +51,12 @@ int main(int argc, char *argv[])
         //Get the totaltime for the process and check to ensure it's run for at least a second
         totalClock = subTime((*clockPtr), startClock);
         boundB = (rand() % 100) + 1;
-        if(boundB >= 60 && (totalClock.sec >= 1))
+        if((clockPtr-> nanosec % 250000000 == 0) && (totalClock.sec >= 1))
         {
             //Determine if the process is to terminate
             boundB = (rand() % 100) + 1;
             //If it is time to terminate, then send the termination message
-            if(boundB >= 25)
+            if(boundB >= 40)
             {
                 terminateToOss(process, procPid);
                 return 0;               
@@ -65,7 +64,7 @@ int main(int argc, char *argv[])
         }
         //Random chance of requesting a resource
         boundB = (rand() % 100) + 1;
-        if(boundB >= 35)
+        if(boundB >= 40)
         {
             //Get a random resource and request it from oss
             resource = rand() % 20;
@@ -181,7 +180,7 @@ int releaseToOss(int process, int procPid, int resource)
 /* Message being sent to oss terminating process */
 void terminateToOss(int process, int procPid)
 {
-    int sendmessage, receivemessage;
+    int sendmessage;
     /* Send the message to oss with type 1 and it's a request */
     msg message = {.typeofMsg = 1, .msgDetails = 2, .process = procPid, .processesPid = process};
     

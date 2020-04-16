@@ -117,7 +117,7 @@ void manager(int maxProcsInSys, int verbose)
     int granted1;
     int totalProcs = 0;
 
-    int i, j; //For loops
+    int i; //For loops
     int processExec; //exec  nd check for failurei
     int deadlockDetector = 0; //deadlock flag
     int procPid; //generated pid
@@ -135,7 +135,7 @@ void manager(int maxProcsInSys, int verbose)
     outputLines += 19;
 
     //Loop runs constantly until it has to terminate
-    while(totalProcs <= 100)
+    while(1)
     {
         //Only 18 processes in the system at once and spawn random between 0 and 5000000000
         if((procCounter < maxProcsInSys) && ((clockPtr-> sec > spawnNextProc.sec) || (clockPtr-> sec == spawnNextProc.sec && clockPtr-> nanosec >= spawnNextProc.nanosec)))
@@ -265,11 +265,13 @@ void manager(int maxProcsInSys, int verbose)
                         outputLines++;
                     }
                 }
+                else
+                    messageToProcess(message.processesPid, 4);
             }
             /* If it is time to terminate the process */
             else if(message.msgDetails == 2)
             {
-                int pid;
+                int pidWaiting;
                 //Resources are available once again
                 for(i = 0; i < 20; i++)
                 {
@@ -283,7 +285,7 @@ void manager(int maxProcsInSys, int verbose)
                 pidArr[message.process] = -1;
                 procCounter -= 1;
                 normalTerminations++;
-                pid = waitpid(message.processesPid, NULL, 0);
+                pidWaiting = waitpid(message.processesPid, NULL, 0);
                 if(outputLines < 100000 && verbose == 1)
                 {
                     fprintf(filePtr, "Oss has acknowledged P%d terminating normally at time %d:%09d\n", message.process, clockPtr-> sec, clockPtr-> nanosec);
