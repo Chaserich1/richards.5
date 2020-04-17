@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     int procsResources[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};    
 
     int i; // loops
-    srand(time(0) + (clockPtr-> nanosec / 500000) + 100000);
+    srand(time(0) + process);
     //Starting clock value for the process is now
     startClock = *clockPtr;
 
@@ -51,12 +51,12 @@ int main(int argc, char *argv[])
         //Get the totaltime for the process and check to ensure it's run for at least a second
         totalClock = subTime((*clockPtr), startClock);
         boundB = (rand() % 100) + 1;
-        if((clockPtr-> nanosec % 250000000 == 0) && (totalClock.sec >= 1))
+        if((clockPtr-> nanosec % 1000000 == 0) && (totalClock.sec >= 1))
         {
             //Determine if the process is to terminate
             boundB = (rand() % 100) + 1;
             //If it is time to terminate, then send the termination message
-            if(boundB >= 40)
+            if(boundB >= 45)
             {
                 terminateToOss(process, procPid);
                 return 0;               
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         }
         //Random chance of requesting a resource
         boundB = (rand() % 100) + 1;
-        if(boundB >= 40)
+        if(boundB >= 50)
         {
             //Get a random resource and request it from oss
             resource = rand() % 20;

@@ -2,7 +2,7 @@ SHELL = /bin/sh
 
 CC = gcc
 CFLAGS = -g
-ALL_CFLAGS = -I. -Wall -pthread $(CFLAGS)
+ALL_CFLAGS = -I. -pthread $(CFLAGS)
 MATHFLAG = -lm
 TARGET1 = oss
 TARGET2 = user

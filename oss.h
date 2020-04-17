@@ -95,16 +95,16 @@ clksim nextProcessStartTime(clksim maxTime, clksim curTime);
 /* Resource Decriptor is a fixed size struct containing info on managing the resources in oss */
 typedef struct
 {
-    //Resources Vector
-    int totalResourcesVector[20];
-    //Allocation vector
-    int allocatedVector[20];
+    //Resources shared
+    int sharedResources[20];
+    //Allocatied resources
+    int allocatedResources[20];
     //Shared or not vector
     int resSharedVector[20];
     //Request matrix of resources and the processes doing the requesting
-    int requestingMatrix[18][20];
+    int requesting2D[18][20];
     //Allocated matrix of resources and the processes who have the resources allocated to them
-    int allocatedMatrix[18][20];
+    int allocated2D[18][20];
 } resDesc;
 
 /* Constructor for the resource descriptor: initial instances of each resource class are a random num
@@ -118,8 +118,8 @@ void resDescConstruct(resDesc *descPtr)
     {
         for(j = 0; j < 20; j++)
         {
-            descPtr-> requestingMatrix[i][j] = 0;
-            descPtr-> allocatedMatrix[i][j] = 0;
+            descPtr-> requesting2D[i][j] = 0;
+            descPtr-> allocated2D[i][j] = 0;
         }
     }
     for(i = 0; i < 20; i++)
@@ -131,14 +131,14 @@ void resDescConstruct(resDesc *descPtr)
         {
             //Random Number between 1-10 inclusive
             int randNum2 = rand() % 10 + 1;
-            descPtr-> totalResourcesVector[i] = randNum2;
-            descPtr-> allocatedVector[i] = descPtr-> totalResourcesVector[i];
+            descPtr-> sharedResources[i] = randNum2;
+            descPtr-> allocatedResources[i] = descPtr-> sharedResources[i];
             descPtr-> resSharedVector[i] = 0;
         }
         else
         {
-            descPtr-> totalResourcesVector[i] = 7;
-            descPtr-> allocatedVector[i] = descPtr-> totalResourcesVector[i];
+            descPtr-> sharedResources[i] = 7;
+            descPtr-> allocatedResources[i] = descPtr-> sharedResources[i];
             descPtr-> resSharedVector[i] = 1;
         }       
     }
@@ -147,6 +147,6 @@ void resDescConstruct(resDesc *descPtr)
 //Prototypes for deadlock checking from notes and deadlock resolution and for printing allocated matrix
 int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int *procCounter, int *outputLines);
 int req_lt_avail(int req[], int avail[], int shared[], int held[]);
-void printAllocatedMatrix(int allocatedMatrix[18][20], int processes, int resources);                                   void printMatrix(resDesc resDescPtr, int processes, int resources); 
+void printAllocatedMatrix(int allocated2D[18][20], int processes, int resources);                                   void printMatrix(resDesc resDescPtr, int processes, int resources); 
 
 #endif

@@ -195,10 +195,10 @@ void manager(int maxProcsInSys, int verbose)
                 if(resDescPtr-> resSharedVector[message.resource] == 1)
                 {
                     //Make sure it doesn't have more than available of the shared resource
-                    if(resDescPtr-> allocatedMatrix[message.process][message.resource] < 7)
+                    if(resDescPtr-> allocated2D[message.process][message.resource] < 7)
                     {
                         //Grant the request for resource and send message to process that it was granted
-                        resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
+                        resDescPtr-> allocated2D[message.process][message.resource] += 1;
                         granted++;
                         messageToProcess(message.processesPid, 3);
                         if(outputLines < 100000 && verbose == 1)
@@ -210,7 +210,7 @@ void manager(int maxProcsInSys, int verbose)
                     //Otherwise deny the request and send denied message to process
                     else
                     {
-                        resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
+                        resDescPtr-> requesting2D[message.process][message.resource] += 1;
                         messageToProcess(message.processesPid, 4);
                         if(outputLines < 100000 && verbose == 1)
                         {
@@ -220,11 +220,11 @@ void manager(int maxProcsInSys, int verbose)
                     }
                 }
                 /* Requesting a nonshareable resource, check if there are any left */
-                else if(resDescPtr-> allocatedVector[message.resource] > 0)
+                else if(resDescPtr-> allocatedResources[message.resource] > 0)
                 {
                     //Remove it from the allocated vector and add it to the matrix for the process
-                    resDescPtr-> allocatedVector[message.resource] -= 1;
-                    resDescPtr-> allocatedMatrix[message.process][message.resource] += 1;
+                    resDescPtr-> allocatedResources[message.resource] -= 1;
+                    resDescPtr-> allocated2D[message.process][message.resource] += 1;
                     //Let child know the request was granted
                     granted++;
                     messageToProcess(message.processesPid, 3);
@@ -238,7 +238,7 @@ void manager(int maxProcsInSys, int verbose)
                 else
                 {
                     //Add one to the request for the process and send deny message to child
-                    resDescPtr-> requestingMatrix[message.process][message.resource] += 1;
+                    resDescPtr-> requesting2D[message.process][message.resource] += 1;
                     messageToProcess(message.processesPid, 4);
                     if(outputLines < 100000 && verbose == 1)
                     {
@@ -252,12 +252,12 @@ void manager(int maxProcsInSys, int verbose)
             else if(message.msgDetails == 1)
             {
                 //If there are resources allocated to the process
-                if(resDescPtr-> allocatedMatrix[message.process][message.resource] > 0)
+                if(resDescPtr-> allocated2D[message.process][message.resource] > 0)
                 {
                     //If it's not shared, release, remove from allocated matrix and let the process know
                     if(resDescPtr-> resSharedVector[message.resource] == 0)
-                        resDescPtr-> allocatedVector[message.resource] += 1;
-                    resDescPtr-> allocatedMatrix[message.process][message.resource] -= 1;
+                        resDescPtr-> allocatedResources[message.resource] += 1;
+                    resDescPtr-> allocated2D[message.process][message.resource] -= 1;
                     messageToProcess(message.processesPid, 3);
                     if(outputLines < 100000 && verbose == 1)
                     {
@@ -277,9 +277,9 @@ void manager(int maxProcsInSys, int verbose)
                 {
                     //Removce all of the requests and allocated (release all resources)
                     if(resDescPtr-> resSharedVector[i] == 0)
-                        resDescPtr-> allocatedVector[i] += resDescPtr-> allocatedMatrix[message.process][i];
-                    resDescPtr-> allocatedMatrix[message.process][i] = 0;
-                    resDescPtr-> requestingMatrix[message.process][i] = 0;
+                        resDescPtr-> allocatedResources[i] += resDescPtr-> allocated2D[message.process][i];
+                    resDescPtr-> allocated2D[message.process][i] = 0;
+                    resDescPtr-> requesting2D[message.process][i] = 0;
                 }
                 //The simulated pid is available now, wait for process completion
                 pidArr[message.process] = -1;
@@ -306,7 +306,7 @@ void manager(int maxProcsInSys, int verbose)
         {
             for(j = 0; j < 20; j++)
             {
-                granted += resDescPtr-> allocatedMatrix[i][j];
+                granted += resDescPtr-> allocated2D[i][j];
                 if(granted >= 20)
                 {
                     printMatrix((*resDescPtr), maxProcsInSys, 20);
@@ -436,7 +436,7 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
     int releasedValues[20];
 
     for(i = 0; i < 20; i++)
-        work[i] = resDescPtr-> allocatedVector[i];
+        work[i] = resDescPtr-> allocatedResources[i];
     for(i = 0; i < nProcs; i++)
         finish[i] = 0;
 
@@ -444,11 +444,11 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
     {
         if(finish[p])
             continue;
-        if((req_lt_avail(resDescPtr-> requestingMatrix[p], resDescPtr-> allocatedVector, resDescPtr-> resSharedVector, resDescPtr-> allocatedMatrix[p])))
+        if((req_lt_avail(resDescPtr-> requesting2D[p], resDescPtr-> allocatedResources, resDescPtr-> resSharedVector, resDescPtr-> allocated2D[p])))
         {
             finish[p] = 1;
             for(i = 0; i < 20; i++)
-                work[i] += resDescPtr-> allocatedMatrix[p][i];
+                work[i] += resDescPtr-> allocated2D[p][i];
             p = -1;
         }
     }
@@ -484,11 +484,11 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
             {
                 if(resDescPtr-> resSharedVector[j] == 0)
                 {
-                    resDescPtr-> allocatedVector[j] += resDescPtr-> allocatedMatrix[deadlockedProcs[i]][j];
-                    releasedValues[j] += resDescPtr-> allocatedMatrix[deadlockedProcs[i]][j];
+                    resDescPtr-> allocatedResources[j] += resDescPtr-> allocated2D[deadlockedProcs[i]][j];
+                    releasedValues[j] += resDescPtr-> allocated2D[deadlockedProcs[i]][j];
                 }
-                resDescPtr-> allocatedMatrix[deadlockedProcs[i]][j] = 0;
-                resDescPtr-> requestingMatrix[deadlockedProcs[i]][j] = 0;
+                resDescPtr-> allocated2D[deadlockedProcs[i]][j] = 0;
+                resDescPtr-> requesting2D[deadlockedProcs[i]][j] = 0;
                 //if(releasedValues[j] <= 7 && releasedValues[j] > 0)
                 //    fprintf(filePtr, "      Resources released are: R%d:%d\n", j, releasedValues[j]);
             }
@@ -510,7 +510,7 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
 }
 
 /* Print Allocation Matrix according to the assignment sheet */
-void printAllocatedMatrix(int allocatedMatrix[18][20], int processes, int resources)
+void printAllocatedMatrix(int allocated2D[18][20], int processes, int resources)
 {
     int mRow, mColumn;
     fprintf(filePtr, "Allocated Matrix\n   ");
@@ -524,10 +524,10 @@ void printAllocatedMatrix(int allocatedMatrix[18][20], int processes, int resour
         fprintf(filePtr, "P%-2d ", mRow);
         for(mColumn = 0; mColumn < resources; mColumn++)
         {
-            if(allocatedMatrix[mRow][mColumn] == 0)
+            if(allocated2D[mRow][mColumn] == 0)
                 fprintf(filePtr, "0   ");
             else
-                fprintf(filePtr, "%-3d ", allocatedMatrix[mRow][mColumn]);           
+                fprintf(filePtr, "%-3d ", allocated2D[mRow][mColumn]);           
         }
         fprintf(filePtr, "\n");
     }
@@ -536,7 +536,7 @@ void printAllocatedMatrix(int allocatedMatrix[18][20], int processes, int resour
 
 void printMatrix(resDesc resDescPtr, int processes, int resources)
 {
-    printAllocatedMatrix(resDescPtr.allocatedMatrix, processes, resources);
+    printAllocatedMatrix(resDescPtr.allocated2D, processes, resources);
     return;
 }
 
