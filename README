@@ -49,7 +49,7 @@ After killing and releasing P3's resources, I run the deadlock function again to
 if there is still a deadlock even after releasing P3's resources. If there is, then next P16
 would be killed and it's resources released. If there wasn't still a deadlock, then the program
 would go back to normal execution, and continue granting, releasing or terminating based on
-requests. Based on my program runs, I've noticed that on average around 30% of the deadlocked
+requests. Based on my program runs, I've noticed that on average around 15-50% of the deadlocked
 processes need to terminate to resolve the deadlock.  
 
 --------------------------------------------------------------------------------
