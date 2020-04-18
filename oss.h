@@ -25,11 +25,11 @@ void displayHelpMessage(); //-h getopt option
 void sigHandler(int sig); //Signal Handle(ctrl c and timeout)
 void removeAllMem(); //Removes all sharedmemory
 FILE* openLogFile(char *file); //Opens the output log file
-FILE* filePtr;
+FILE* filePtr; //output file
 void manager(int, int); //resource manager
 int generateProcPid(int *pidArr, int totalPids); //Generates the pid (0,1,2,3,4,..17) 
-void printStats();
-int divideNums(int, int); 
+void printStats(); //printing the final statistics
+int divideNums(int, int); //dividing totalterminations by detected deadlocks
 
 //Shared memory keys and shared memory segment ids
 const key_t resDescKey = 122032;
@@ -39,15 +39,18 @@ int resDescSegment, clockSegment, msgqSegment;
 
 /* ---------------------------------Messaging Setup-------------------------------------- */
 
-//Message structure
+/* Message structure that includes the type of message (1 for oss), the real and generated pids,
+   the specific resource for release or request, and message details which says whether the process
+   is requesting, releasing, or terminating. For oss it says whether it is granting or denying */
 typedef struct
 {
     long typeofMsg;
     int process;
-    int resource;
     int processesPid;
+    int resource;
     int msgDetails;
 } msg;
+
 //Prototypes for different messages to and from oss and user
 void messageToProcess(int receiver, int response);
 int requestToOss(int process, int procPid, int resource);
@@ -74,7 +77,7 @@ void clockIncrementor(clksim *simTime, int incrementor)
     }
 }
 
-//For subtracting the virtual clock times
+//For subtracting the virtual clock times in user to determine if a process has run for at least 1 second
 clksim subTime(clksim time1, clksim time2)
 {
     clksim sub = {.sec = time1.sec - time2.sec, .nanosec = time1.nanosec - time2.nanosec};
@@ -97,10 +100,10 @@ typedef struct
 {
     //Resources shared
     int sharedResources[20];
-    //Allocatied resources
-    int allocatedResources[20];
+    //Available resources
+    int availableResources[20];
     //Shared or not vector
-    int resSharedVector[20];
+    int resSharedOrNot[20];
     //Request matrix of resources and the processes doing the requesting
     int requesting2D[18][20];
     //Allocated matrix of resources and the processes who have the resources allocated to them
@@ -113,7 +116,7 @@ void resDescConstruct(resDesc *descPtr)
 {
     int i, j; //loops
     srand(time(NULL));
-    //Initialize the matrixes to all zeros
+    //Initialize the spots in the tables to all zeros
     for(i = 0; i < 18; i++)
     {
         for(j = 0; j < 20; j++)
@@ -132,21 +135,23 @@ void resDescConstruct(resDesc *descPtr)
             //Random Number between 1-10 inclusive
             int randNum2 = rand() % 10 + 1;
             descPtr-> sharedResources[i] = randNum2;
-            descPtr-> allocatedResources[i] = descPtr-> sharedResources[i];
-            descPtr-> resSharedVector[i] = 0;
+            descPtr-> availableResources[i] = descPtr-> sharedResources[i];
+            descPtr-> resSharedOrNot[i] = 0;
         }
         else
         {
             descPtr-> sharedResources[i] = 7;
-            descPtr-> allocatedResources[i] = descPtr-> sharedResources[i];
-            descPtr-> resSharedVector[i] = 1;
+            descPtr-> availableResources[i] = descPtr-> sharedResources[i];
+            descPtr-> resSharedOrNot[i] = 1;
         }       
     }
     return;
 }
-//Prototypes for deadlock checking from notes and deadlock resolution and for printing allocated matrix
+
+//Prototypes for deadlock checking from notes and deadlock resolution and for printing allocated table
 int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int *procCounter, int *outputLines);
 int req_lt_avail(int req[], int avail[], int shared[], int held[]);
-void printAllocatedMatrix(int allocated2D[18][20], int processes, int resources);                                   void printMatrix(resDesc resDescPtr, int processes, int resources); 
+void printAllocatedTable(int allocated2D[18][20], int processes, int resources);
+void printTable(resDesc resDescPtr, int processes, int resources); 
 
 #endif

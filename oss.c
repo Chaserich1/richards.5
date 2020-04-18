@@ -131,8 +131,10 @@ void manager(int maxProcsInSys, int verbose)
     for(i = 0; i < maxProcsInSys; i++)
         pidArr[i] = -1;
 
-    printMatrix((*resDescPtr), maxProcsInSys, 20);
-    outputLines += 19;
+    //Printing the inital allocated matrix showing that nothing is allocated
+    fprintf(filePtr, "Program Starting - No Resources Allocated to Processes: \n");
+    printTable((*resDescPtr), maxProcsInSys, 20);
+    outputLines += 20;
 
     //Loop runs constantly until it has to terminate
     while(1)
@@ -182,6 +184,7 @@ void manager(int maxProcsInSys, int verbose)
         else if((msgrcv(msgqSegment, &message, sizeof(msg), 1, IPC_NOWAIT)) > 0) 
         {
             //printf("Message Handling");
+            //Process is requesting a resource
             if(message.msgDetails == 0)
             {
                 //Write the request to the log file for verbose
@@ -191,8 +194,8 @@ void manager(int maxProcsInSys, int verbose)
                     outputLines++;
                    
                 }
-                //Requesting the shared resource
-                if(resDescPtr-> resSharedVector[message.resource] == 1)
+                //If the process is requesting a resource that is shared
+                if(resDescPtr-> resSharedOrNot[message.resource] == 1)
                 {
                     //Make sure it doesn't have more than available of the shared resource
                     if(resDescPtr-> allocated2D[message.process][message.resource] < 7)
@@ -220,10 +223,10 @@ void manager(int maxProcsInSys, int verbose)
                     }
                 }
                 /* Requesting a nonshareable resource, check if there are any left */
-                else if(resDescPtr-> allocatedResources[message.resource] > 0)
+                else if(resDescPtr-> availableResources[message.resource] > 0)
                 {
-                    //Remove it from the allocated vector and add it to the matrix for the process
-                    resDescPtr-> allocatedResources[message.resource] -= 1;
+                    //Remove it from the free resources and add it to the 2D array for the process
+                    resDescPtr-> availableResources[message.resource] -= 1;
                     resDescPtr-> allocated2D[message.process][message.resource] += 1;
                     //Let child know the request was granted
                     granted++;
@@ -237,7 +240,7 @@ void manager(int maxProcsInSys, int verbose)
                 /* Otherwise there are no instances of the nonshareable resource available */
                 else
                 {
-                    //Add one to the request for the process and send deny message to child
+                    //Add one to the request table for the process and send deny message to child
                     resDescPtr-> requesting2D[message.process][message.resource] += 1;
                     messageToProcess(message.processesPid, 4);
                     if(outputLines < 100000 && verbose == 1)
@@ -254,9 +257,9 @@ void manager(int maxProcsInSys, int verbose)
                 //If there are resources allocated to the process
                 if(resDescPtr-> allocated2D[message.process][message.resource] > 0)
                 {
-                    //If it's not shared, release, remove from allocated matrix and let the process know
-                    if(resDescPtr-> resSharedVector[message.resource] == 0)
-                        resDescPtr-> allocatedResources[message.resource] += 1;
+                    //If it's not shared, release, remove from allocated table and let the process know
+                    if(resDescPtr-> resSharedOrNot[message.resource] == 0)
+                        resDescPtr-> availableResources[message.resource] += 1;
                     resDescPtr-> allocated2D[message.process][message.resource] -= 1;
                     messageToProcess(message.processesPid, 3);
                     if(outputLines < 100000 && verbose == 1)
@@ -265,6 +268,7 @@ void manager(int maxProcsInSys, int verbose)
                         outputLines++;
                     }
                 }
+                //Otherwise deny because the child doesn't have the resource
                 else
                     messageToProcess(message.processesPid, 4);
             }
@@ -275,9 +279,10 @@ void manager(int maxProcsInSys, int verbose)
                 //Resources are available once again
                 for(i = 0; i < 20; i++)
                 {
-                    //Removce all of the requests and allocated (release all resources)
-                    if(resDescPtr-> resSharedVector[i] == 0)
-                        resDescPtr-> allocatedResources[i] += resDescPtr-> allocated2D[message.process][i];
+                    /* Removce all of the requests and allocated (release all resources)
+                       Add all of the allocated resources back to the available */
+                    if(resDescPtr-> resSharedOrNot[i] == 0)
+                        resDescPtr-> availableResources[i] += resDescPtr-> allocated2D[message.process][i];
                     resDescPtr-> allocated2D[message.process][i] = 0;
                     resDescPtr-> requesting2D[message.process][i] = 0;
                 }
@@ -294,11 +299,11 @@ void manager(int maxProcsInSys, int verbose)
             }
         }
        
-        /* Every 20 granted requests, print the allocation matrix */ 
+        /* Every 20 granted requests, print the allocated grid */ 
         if(granted % 20 == 0 && granted != 0 && granted != granted1 && verbose == 1)
         {
             granted1 = granted;
-            printMatrix((*resDescPtr), maxProcsInSys, 20);
+            printTable((*resDescPtr), maxProcsInSys, 20);
             outputLines += 19;
         }
         /*
@@ -309,7 +314,7 @@ void manager(int maxProcsInSys, int verbose)
                 granted += resDescPtr-> allocated2D[i][j];
                 if(granted >= 20)
                 {
-                    printMatrix((*resDescPtr), maxProcsInSys, 20);
+                    printTable((*resDescPtr), maxProcsInSys, 20);
                     outputLines += 19;
                     break;   
                 }
@@ -321,13 +326,15 @@ void manager(int maxProcsInSys, int verbose)
         if(clockPtr-> nanosec == 0)
         {
             //printf("Check for deadlock");
+            //Call the deadlock function from notes (which will also terminate the first detected deadlock)
             deadlockDetector = deadlock(resDescPtr, maxProcsInSys, clockPtr, pidArr, &procCounter, &outputLines); 
          
             if(deadlockAlgRuns <= clockPtr-> sec)
             {
                 deadlockAlgRuns++;
             } 
- 
+            /* If there was a deadlock on the first check above then run the deadlock detecting algorithm again
+               repeatedly until the deadlock algorithm function returns 0 meaning there is no longer a deadlock */
             while(deadlockDetector == 1 && outputLines < 100000)
             { 
                 fprintf(filePtr, "   Oss running deadlock detector after process kill\n");
@@ -354,7 +361,8 @@ void manager(int maxProcsInSys, int verbose)
         //Signal the semaphore we are finished
         sem_post(sem);      
     }    
-   
+    
+    //Will never actually get here because of the infinite loop, so moving to alarm signal handler
     //printf("%d", clockPtr-> sec); 
     //printf("Total Granted Requests: %d\n", granted);
     //printf("Total Normal Terminations: %d\n", normalTerminations);
@@ -365,7 +373,7 @@ void manager(int maxProcsInSys, int verbose)
     return;  
 }
 
-//Generate a simulated process pid between 0-18
+//Generate a simulated process pid between 0-17
 int generateProcPid(int *pidArr, int totalPids)
 {
     int i;
@@ -378,7 +386,7 @@ int generateProcPid(int *pidArr, int totalPids)
 }
 
 /* Determines when to launch the next process based on a random value
- *    between 0 and maxTimeBetweenNewProcs and returns the time that it should launch */
+   between 0 and maxTimeBetweenNewProcs and returns the time that it should launch */
 clksim nextProcessStartTime(clksim maxTimeBetweenProcs, clksim curTime)
 {
     clksim nextProcTime = {.sec = (rand() % (maxTimeBetweenProcs.sec + 1)) + curTime.sec, .nanosec = (rand() % (maxTimeBetweenProcs.nanosec + 1)) + curTime.nanosec};
@@ -390,7 +398,7 @@ clksim nextProcessStartTime(clksim maxTimeBetweenProcs, clksim curTime)
     return nextProcTime;
 }
 
-/* For sending the message to the process */
+/* For sending the message to the processes */
 void messageToProcess(int receiver, int response)
 {
     int sendmessage;
@@ -411,48 +419,54 @@ void messageToProcess(int receiver, int response)
 int req_lt_avail(int req[], int avail[], int shared[], int held[])
 {
     int i;
+    //Loop over the process requests
     for(i = 0; i < 20; i++)
     {
-        if(shared[i] == 1 && req[i] > 0 && held[i] == 5)
+        //If it is more than the available shared requests break (returning false 0)
+        if(shared[i] == 1 && req[i] > 0 && held[i] == 7)
             break;
+        //If the request is greater than available break (returning false 0)
         else if(req[i] > avail[i])
             break;
     }
-
-    if(i == 20)
-        return 1;
-    else
-        return 0;
+    //If you go over complete loop then you have enough to satisfy the request
+    return (i == 20);
 }
 
 /* Deadlock algorithm from notes */
 int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int *procCounter, int *outputLines)
 {
-    int i, p;
-    int work[20];
-    int finish[nProcs];
-    int deadlockedProcs[nProcs];
-    int counter = 0;
-    int releasedValues[20];
-
+    int i, p; //loops
+    int work[20]; //avail from avail vector
+    int finish[nProcs]; //whether the process is going to finish
+    int deadlockedProcs[nProcs]; //deadlocked procs
+    int counter = 0; //counter for deadlocked procs
+    int releasedValues[20]; //Released resources
+    //Initialize work from available resources
     for(i = 0; i < 20; i++)
-        work[i] = resDescPtr-> allocatedResources[i];
+        work[i] = resDescPtr-> availableResources[i];
+    //Initialize as they won't finish
     for(i = 0; i < nProcs; i++)
         finish[i] = 0;
-
+    //For each process
     for(p = 0; p < nProcs; p++)
     {
+        //If we know this process is done, continue
         if(finish[p])
             continue;
-        if((req_lt_avail(resDescPtr-> requesting2D[p], resDescPtr-> allocatedResources, resDescPtr-> resSharedVector, resDescPtr-> allocated2D[p])))
+        //Check the function above whether it can have a shared resource or whether request < available
+        if((req_lt_avail(resDescPtr-> requesting2D[p], resDescPtr-> availableResources, resDescPtr-> resSharedOrNot, resDescPtr-> allocated2D[p])))
         {
+            //It will finish
             finish[p] = 1;
+            //Take everything allocated to the process and add to the work vector 
             for(i = 0; i < 20; i++)
                 work[i] += resDescPtr-> allocated2D[p][i];
+            //set process index to -1
             p = -1;
         }
     }
-
+    //If request > available reset the p, if it is continue to the next one
     for(p = 0; p < nProcs; p++)
     {
         if(!finish[p])
@@ -465,6 +479,7 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
        the program. */
     if(counter > 0)
     {
+        //For the deadlocked processes
         for(i = 0; i < counter; i++)
         {
             if((*outputLines) < 100000)
@@ -482,18 +497,22 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
             //Release the resources
             for(j = 0; j < 20; j++)
             {
-                if(resDescPtr-> resSharedVector[j] == 0)
+                if(resDescPtr-> resSharedOrNot[j] == 0)
                 {
-                    resDescPtr-> allocatedResources[j] += resDescPtr-> allocated2D[deadlockedProcs[i]][j];
+                    //Add the allocated resources back to the available vector
+                    resDescPtr-> availableResources[j] += resDescPtr-> allocated2D[deadlockedProcs[i]][j];
+                    //Add the allocated resources to the released vector
                     releasedValues[j] += resDescPtr-> allocated2D[deadlockedProcs[i]][j];
                 }
+                //If there is a resource released, print the process, resource, and amount being released
+                if(resDescPtr-> allocated2D[deadlockedProcs[i]][j])
+                    fprintf(filePtr, "   P%d released resource: R%d:%d\n", deadlockedProcs[i], j, resDescPtr-> allocated2D[deadlockedProcs[i]][j]);
+                //Clear the allocated and requests for this processes resources
                 resDescPtr-> allocated2D[deadlockedProcs[i]][j] = 0;
                 resDescPtr-> requesting2D[deadlockedProcs[i]][j] = 0;
-                //if(releasedValues[j] <= 7 && releasedValues[j] > 0)
-                //    fprintf(filePtr, "      Resources released are: R%d:%d\n", j, releasedValues[j]);
             }
 
-            //Add the pid back to the available pids
+            //Add the pid back to the available pids and decrement the procs in the system so a new one can launch
             pidArr[deadlockedProcs[i]] = -1;
             (*procCounter)--;
             
@@ -502,30 +521,35 @@ int deadlock(resDesc *resDescPtr, int nProcs, clksim *clockPtr, int *pidArr, int
                 fprintf(filePtr, "   Oss killing process P%d\n", deadlockedProcs[i]);
                 (*outputLines)++;
             }
-            return 1;
+            return 1; //return 1 because there is still another deadlock
         }
-        return 1;
+        return 1; //return 1 because there is still another deadlock
     }
-    return 0;   
+    return 0; //return 0 because there is no deadlocks in the counter
 }
 
 /* Print Allocation Matrix according to the assignment sheet */
-void printAllocatedMatrix(int allocated2D[18][20], int processes, int resources)
+void printAllocatedTable(int allocated2D[18][20], int processes, int resources)
 {
     int mRow, mColumn;
     fprintf(filePtr, "Allocated Matrix\n   ");
+    //Print the resource column names R0-R19
     for(mColumn = 0; mColumn < resources; mColumn++)
     {
         fprintf(filePtr, "R%-2d ", mColumn);
     }
     fprintf(filePtr, "\n");
+    //Print the process row names P0-P17
     for(mRow = 0; mRow < processes; mRow++)
     {
         fprintf(filePtr, "P%-2d ", mRow);
+        //Loop through each spot in the table
         for(mColumn = 0; mColumn < resources; mColumn++)
         {
+            //If the spot is not allocated, print 0
             if(allocated2D[mRow][mColumn] == 0)
                 fprintf(filePtr, "0   ");
+            //Otherwise print the allocated value
             else
                 fprintf(filePtr, "%-3d ", allocated2D[mRow][mColumn]);           
         }
@@ -534,9 +558,10 @@ void printAllocatedMatrix(int allocated2D[18][20], int processes, int resources)
     return;
 }
 
-void printMatrix(resDesc resDescPtr, int processes, int resources)
+/* Function for printing the allocated values (will be called roughly every 20 granted requests */
+void printTable(resDesc resDescPtr, int processes, int resources)
 {
-    printAllocatedMatrix(resDescPtr.allocated2D, processes, resources);
+    printAllocatedTable(resDescPtr.allocated2D, processes, resources);
     return;
 }
 
@@ -564,7 +589,7 @@ void removeAllMem()
     fclose(filePtr);   
     exit(EXIT_SUCCESS);
 } 
-
+//Used for the average deadlock termiantion calculation
 int divideNums(int a, int b)
 {
     if(a == 0)
@@ -575,11 +600,12 @@ int divideNums(int a, int b)
     return answer * 100;
 }
 
+/* Print the final statistics to the console and the end of the file - will be called in signal handler */
 void printStats()
 {
     fprintf(filePtr, "Total Granted Requests: %d\n", granted);
     fprintf(filePtr, "Total Normal Terminations: %d\n", normalTerminations);
-    fprintf(filePtr, "Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns - 1500);
+    fprintf(filePtr, "Total Deadlock Algorithm Runs: %d\n", deadlockAlgRuns);
     fprintf(filePtr, "Total Deadlock Terminations: %d\n", deadlockTerminations);
     fprintf(filePtr, "Pecentage of processes in deadlock that had to terminate on avg: %d%\n", divideNums(deadlockTerminations, totalCounter));
     printf("Total Granted Requests: %d\n", granted);
@@ -590,8 +616,7 @@ void printStats()
 }
 
 /* Signal handler, that looks to see if the signal is for 2 seconds being up or ctrl-c being entered.
-   In both cases, I connect to shared memory so that I can write the time that it is killed to the file
-   and so that I can disconnect and remove the shared memory. */
+   In both cases, print the final statistics and remove all of the memory, semaphores, and message queues */
 void sigHandler(int sig)
 {
     printStats();
